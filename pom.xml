@@ -57,6 +57,9 @@
           <sdk>
             <platform>16</platform>
           </sdk>
+          <emulator>
+            <avd>giftidea</avd>
+          </emulator>
         </configuration>
       </plugin>
     </plugins>

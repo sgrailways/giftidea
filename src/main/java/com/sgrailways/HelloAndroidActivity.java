@@ -1,11 +1,11 @@
 package com.sgrailways;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
+import com.sgrailways.giftidea.RecipientsList;
+import roboguice.activity.RoboFragmentActivity;
 
-public class HelloAndroidActivity extends Activity {
+public class HelloAndroidActivity extends RoboFragmentActivity {
 
     /**
      * Called when the activity is first created.
@@ -17,6 +17,7 @@ public class HelloAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportFragmentManager().beginTransaction().add(R.id.recipients, new RecipientsList()).commit();
     }
 
     @Override
