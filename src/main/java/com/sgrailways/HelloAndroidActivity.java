@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.sgrailways.giftidea.NewIdeaActivity;
+import com.sgrailways.giftidea.IdeaActivity;
 import com.sgrailways.giftidea.RecipientsList;
 import roboguice.activity.RoboFragmentActivity;
 
@@ -26,7 +26,7 @@ public class HelloAndroidActivity extends RoboFragmentActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivity(new Intent(this, NewIdeaActivity.class));
+                startActivity(new Intent(this, IdeaActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

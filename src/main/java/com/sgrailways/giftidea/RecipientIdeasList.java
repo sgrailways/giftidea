@@ -1,6 +1,7 @@
 package com.sgrailways.giftidea;
 
 import android.R;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import com.google.inject.Inject;
 import roboguice.fragment.RoboListFragment;
 
@@ -34,15 +36,21 @@ public class RecipientIdeasList extends RoboListFragment {
     }
 
     @Override public void onResume() {
-        ((SimpleCursorAdapter)getListAdapter()).swapCursor(cursor());
+        ((SimpleCursorAdapter) getListAdapter()).swapCursor(cursor());
         super.onResume();
+    }
+
+    @Override public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(this.getActivity(), IdeaActivity.class);
+        intent.putExtra("ideaId", id);
+        startActivity(intent);
     }
 
     private Cursor cursor() {
         SQLiteDatabase rdb = database.getReadableDatabase();
         Cursor cursor = rdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{_ID}, Database.RecipientsTable.NAME + "=?", new String[]{recipientName}, null, null, null, "1");
         String recipientId = "";
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             recipientId = cursor.getString(0);
         }
         return rdb.query(TABLE_NAME, new String[]{_ID, IDEA}, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IDEA + " ASC");

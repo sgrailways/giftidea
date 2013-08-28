@@ -14,5 +14,6 @@
   <string name="action_create">create</string>
   <string name="no_hash_tags_message">Must have at least 1 hashtag</string>
   <string name="no_idea_message">Must have an idea!</string>
+  <string name="action_update">update</string>
 
 </resources>
