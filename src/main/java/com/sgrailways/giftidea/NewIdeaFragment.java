@@ -17,6 +17,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import roboguice.util.SafeAsyncTask;
 
 import java.util.LinkedHashSet;
 
@@ -72,28 +73,33 @@ public class NewIdeaFragment extends RoboFragment {
                 } else if (!hasAppropriateLength) {
                     idea.setError(noIdeaMessage);
                 } else {
-                    String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
-                    ContentValues ideaValues = new ContentValues();
-                    ideaValues.put(Database.IdeasTable.IDEA, hashTagLocator.removeAllFrom(idea.getText().toString()));
-                    ideaValues.put(Database.IdeasTable.CREATED_AT, now);
-                    ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
-                    SQLiteDatabase wdb = database.getWritableDatabase();
-                    LinkedHashSet<String> hashTags = hashTagLocator.findAllIn(idea.getText().toString());
-                    try {
-                        wdb.beginTransaction();
-                        for (String hashTag : hashTags) {
-                            ContentValues recipientValues = new ContentValues();
-                            recipientValues.put(Database.RecipientsTable.NAME, hashTag);
-                            recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
-                            recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
-                            long recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
-                            ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
-                            wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
+                    new SafeAsyncTask<Boolean>() {
+                        public Boolean call() throws Exception {
+                            String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
+                            ContentValues ideaValues = new ContentValues();
+                            ideaValues.put(Database.IdeasTable.IDEA, hashTagLocator.removeAllFrom(idea.getText().toString()));
+                            ideaValues.put(Database.IdeasTable.CREATED_AT, now);
+                            ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
+                            SQLiteDatabase wdb = database.getWritableDatabase();
+                            LinkedHashSet<String> hashTags = hashTagLocator.findAllIn(idea.getText().toString());
+                            try {
+                                wdb.beginTransaction();
+                                for (String hashTag : hashTags) {
+                                    ContentValues recipientValues = new ContentValues();
+                                    recipientValues.put(Database.RecipientsTable.NAME, hashTag);
+                                    recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
+                                    recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
+                                    long recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
+                                    ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
+                                    wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
+                                }
+                                wdb.setTransactionSuccessful();
+                                return true;
+                            } finally {
+                                wdb.endTransaction();
+                            }
                         }
-                        wdb.setTransactionSuccessful();
-                    } finally {
-                        wdb.endTransaction();
-                    }
+                    }.execute();
                     getActivity().finish();
                 }
                 return true;
