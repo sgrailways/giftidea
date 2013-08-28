@@ -15,11 +15,38 @@
     android:inputType="textMultiLine"
     android:hint="@string/new_idea_hint" />
 
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/adding" />
+
+    <TextView
+      android:id="@+id/hash_tag_count"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:text="@string/zero" />
+
+    <TextView
+      android:id="@+id/gift_ideas_label"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/gift_ideas" />
+  </LinearLayout>
+
   <TextView
     android:id="@+id/recipients_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:lines="1"
-    android:ellipsize="end"/>
+    android:ellipsize="end" />
 
 </LinearLayout>

@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.sgrailways.HashTagLocator;
 import com.sgrailways.R;
 import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 import java.util.LinkedHashSet;
@@ -21,6 +22,10 @@ public class NewIdeaFragment extends RoboFragment {
     @Inject HashTagLocator hashTagLocator;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipients_view) TextView recipients;
+    @InjectView(R.id.hash_tag_count) TextView hashTagCount;
+    @InjectView(R.id.gift_ideas_label) TextView giftIdeasLabel;
+    @InjectResource(R.string.gift_idea) String giftIdea;
+    @InjectResource(R.string.gift_ideas) String giftIdeas;
     Joiner joiner = Joiner.on(", ");
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +43,12 @@ public class NewIdeaFragment extends RoboFragment {
 
             public void afterTextChanged(Editable s) {
                 LinkedHashSet<String> hashTags = hashTagLocator.findAllIn(s.toString());
+                hashTagCount.setText(String.valueOf(hashTags.size()));
+                if(hashTags.size() == 1) {
+                    giftIdeasLabel.setText(giftIdea);
+                } else {
+                    giftIdeasLabel.setText(giftIdeas);
+                }
                 recipients.setText(joiner.join(hashTags));
             }
         });

@@ -7,5 +7,9 @@
   <string name="hello_world">Hello world!</string>
   <string name="action_add">new idea</string>
   <string name="new_idea_hint">Books by MC Escher for #ginger</string>
+  <string name="adding">Adding</string>
+  <string name="zero">0</string>
+  <string name="gift_ideas">gift ideas</string>
+  <string name="gift_idea">gift idea</string>
 
 </resources>
