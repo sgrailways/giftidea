@@ -1,6 +1,5 @@
 package com.sgrailways.giftidea;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -33,9 +32,6 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL(createRecipients);
         db.execSQL(createIdeas);
-        ContentValues values = new ContentValues();
-        values.put(RecipientsTable.NAME, "ginger");
-        db.insert(RecipientsTable.TABLE_NAME, null, values);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
