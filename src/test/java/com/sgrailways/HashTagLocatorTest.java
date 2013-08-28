@@ -36,4 +36,12 @@ public class HashTagLocatorTest {
         assertThat(iterator.next(), is("#more"));
         assertThat(iterator.next(), is("#than7"));
     }
+
+    @Test public void shouldReturnNotDuplicateHashTags() {
+        Set<String> hashTags = hashTagLocator.findAllIn("#more tags #than7 you'd #MORE expect #");
+        assertThat(hashTags.size(), is(2));
+        Iterator<String> iterator = hashTags.iterator();
+        assertThat(iterator.next(), is("#more"));
+        assertThat(iterator.next(), is("#than7"));
+    }
 }
