@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">GiftIdea!</string>
-    <string name="hello">Hello giftidea!</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+  <string name="app_name">GiftIdea!</string>
+  <string name="hello">Hello giftidea!</string>
+  <string name="action_settings">Settings</string>
+  <string name="hello_world">Hello world!</string>
+  <string name="action_add">new idea</string>
+  <string name="new_idea_hint">Books by MC Escher for #ginger</string>
 
 </resources>
