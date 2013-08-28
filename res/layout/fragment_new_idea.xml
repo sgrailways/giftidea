@@ -18,6 +18,8 @@
   <TextView
     android:id="@+id/recipients_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    android:layout_height="wrap_content"
+    android:lines="1"
+    android:ellipsize="end"/>
 
 </LinearLayout>
