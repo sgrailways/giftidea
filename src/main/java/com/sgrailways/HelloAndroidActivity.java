@@ -19,9 +19,8 @@ public class HelloAndroidActivity extends RoboFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate(com.sgrailways.R.menu.main, menu);
-	return true;
+        getMenuInflater().inflate(com.sgrailways.R.menu.main, menu);
+        return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
