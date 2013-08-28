@@ -15,4 +15,22 @@
     android:inputType="textMultiLine"
     android:hint="@string/new_idea_hint" />
 
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="8dp">
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_marginRight="5dp"
+      android:text="@string/editing_for_label" />
+
+    <TextView
+      android:id="@+id/recipient"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content" />
+  </LinearLayout>
+
 </LinearLayout>

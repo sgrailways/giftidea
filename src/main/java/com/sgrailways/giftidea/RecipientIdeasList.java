@@ -43,6 +43,7 @@ public class RecipientIdeasList extends RoboListFragment {
     @Override public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(this.getActivity(), IdeaActivity.class);
         intent.putExtra("ideaId", id);
+        intent.putExtra("recipient", recipientName);
         startActivity(intent);
     }
 

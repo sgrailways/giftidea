@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.google.inject.Inject;
 import com.sgrailways.R;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ import roboguice.inject.InjectView;
 public class EditIdeaFragment extends RoboFragment {
     @Inject Database database;
     @InjectView(R.id.idea) EditText idea;
+    @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
     boolean hasAppropriateLength = false;
     private long ideaId;
@@ -30,11 +32,13 @@ public class EditIdeaFragment extends RoboFragment {
 
     @Override public void onResume() {
         super.onResume();
-        ideaId = getActivity().getIntent().getExtras().getLong("ideaId", -1L);
+        Bundle extras = getActivity().getIntent().getExtras();
+        ideaId = extras.getLong("ideaId", -1L);
         SQLiteDatabase rdb = database.getReadableDatabase();
         Cursor cursor = rdb.query(Database.IdeasTable.TABLE_NAME, new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA}, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(ideaId)}, null, null, null, "1");
         cursor.moveToFirst();
         idea.setText(cursor.getString(1));
+        cursor.close();
         idea.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -46,6 +50,7 @@ public class EditIdeaFragment extends RoboFragment {
                 hasAppropriateLength = StringUtils.isNotEmpty(idea.getText().toString());
             }
         });
+        recipient.setText(extras.getString("recipient", "#error"));
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
