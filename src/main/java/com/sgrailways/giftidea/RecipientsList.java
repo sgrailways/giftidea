@@ -32,4 +32,10 @@ public class RecipientsList extends RoboListFragment {
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override public void onResume() {
+        SQLiteDatabase rdb = database.getReadableDatabase();
+        ((SimpleCursorAdapter)getListAdapter()).swapCursor(rdb.query(TABLE_NAME, new String[]{_ID, NAME}, null, null, null, null, NAME + " ASC"));
+        super.onResume();
+    }
 }
