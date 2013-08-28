@@ -1,6 +1,7 @@
 package com.sgrailways.giftidea;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
@@ -81,11 +82,17 @@ public class NewIdeaFragment extends RoboFragment {
                     try {
                         wdb.beginTransaction();
                         for (String hashTag : hashTags) {
-                            ContentValues recipientValues = new ContentValues();
-                            recipientValues.put(Database.RecipientsTable.NAME, hashTag);
-                            recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
-                            recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
-                            long recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
+                            Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID}, Database.RecipientsTable.NAME + "=?", new String[]{hashTag}, null, null, null, "1");
+                            long recipientId;
+                            if (query.moveToFirst()) {
+                                recipientId = query.getLong(0);
+                            } else {
+                                ContentValues recipientValues = new ContentValues();
+                                recipientValues.put(Database.RecipientsTable.NAME, hashTag);
+                                recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
+                                recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
+                                recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
+                            }
                             ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
                             wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
                         }
