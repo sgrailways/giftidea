@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import com.sgrailways.R;
 import roboguice.activity.RoboFragmentActivity;
 
-public class HelloAndroidActivity extends RoboFragmentActivity {
+public class MainActivity extends RoboFragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
