@@ -20,12 +20,10 @@ public class RecipientsList extends RoboListFragment {
     @Inject Database database;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        SQLiteDatabase rdb = database.getReadableDatabase();
-        Cursor cursor = rdb.query(TABLE_NAME, new String[]{_ID, NAME}, null, null, null, null, NAME + " ASC");
         ListAdapter adapter = new SimpleCursorAdapter(
                 this.getActivity(),
                 R.layout.simple_list_item_1,
-                cursor,
+                cursor(),
                 new String[]{NAME},
                 new int[]{R.id.text1}
         );
@@ -34,8 +32,12 @@ public class RecipientsList extends RoboListFragment {
     }
 
     @Override public void onResume() {
-        SQLiteDatabase rdb = database.getReadableDatabase();
-        ((SimpleCursorAdapter)getListAdapter()).swapCursor(rdb.query(TABLE_NAME, new String[]{_ID, NAME}, null, null, null, null, NAME + " ASC"));
+        ((SimpleCursorAdapter)getListAdapter()).swapCursor(cursor());
         super.onResume();
+    }
+
+    private Cursor cursor() {
+        SQLiteDatabase rdb = database.getReadableDatabase();
+        return rdb.query(TABLE_NAME, new String[]{_ID, NAME}, null, null, null, null, NAME + " ASC");
     }
 }
