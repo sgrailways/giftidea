@@ -11,5 +11,8 @@
   <string name="zero">0</string>
   <string name="gift_ideas">gift ideas</string>
   <string name="gift_idea">gift idea</string>
+  <string name="action_create">create</string>
+  <string name="no_hash_tags_message">Must have at least 1 hashtag</string>
+  <string name="no_idea_message">Must have an idea!</string>
 
 </resources>

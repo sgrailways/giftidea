@@ -1,6 +1,7 @@
 package com.sgrailways;
 
 import com.google.inject.Singleton;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
@@ -18,5 +19,15 @@ public class HashTagLocator {
             hashTags.add(matcher.group().toLowerCase());
         }
         return hashTags;
+    }
+
+    public String removeAllFrom(String s) {
+        Matcher matcher = pattern.matcher(s);
+        String hashTagFree = s;
+        while (matcher.find()) {
+            hashTagFree = StringUtils.remove(hashTagFree, matcher.group());
+        }
+        hashTagFree = StringUtils.remove(hashTagFree, "#");
+        return StringUtils.normalizeSpace(hashTagFree);
     }
 }

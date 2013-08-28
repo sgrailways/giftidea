@@ -44,4 +44,9 @@ public class HashTagLocatorTest {
         assertThat(iterator.next(), is("#more"));
         assertThat(iterator.next(), is("#than7"));
     }
+
+    @Test public void shouldRemoveHashTags() {
+        String cleaned = hashTagLocator.removeAllFrom("#more tags #than7 you'd #MORE expect #");
+        assertThat(cleaned, is("tags you'd expect"));
+    }
 }
