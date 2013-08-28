@@ -1,7 +1,6 @@
 package com.sgrailways.giftidea;
 
 import android.R;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,24 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import com.google.inject.Inject;
 import roboguice.fragment.RoboListFragment;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.Database.RecipientsTable.NAME;
-import static com.sgrailways.giftidea.Database.RecipientsTable.TABLE_NAME;
+import static com.sgrailways.giftidea.Database.IdeasTable.IDEA;
+import static com.sgrailways.giftidea.Database.IdeasTable.TABLE_NAME;
 
-public class RecipientsList extends RoboListFragment {
+public class RecipientIdeasList extends RoboListFragment {
     @Inject Database database;
+    private String recipientName;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.recipientName = getActivity().getIntent().getExtras().getString("recipient");
         ListAdapter adapter = new SimpleCursorAdapter(
                 this.getActivity(),
                 R.layout.simple_list_item_1,
                 cursor(),
-                new String[]{NAME},
+                new String[]{IDEA},
                 new int[]{R.id.text1}
         );
         setListAdapter(adapter);
@@ -35,18 +34,17 @@ public class RecipientsList extends RoboListFragment {
     }
 
     @Override public void onResume() {
-        ((SimpleCursorAdapter) getListAdapter()).swapCursor(cursor());
+        ((SimpleCursorAdapter)getListAdapter()).swapCursor(cursor());
         super.onResume();
-    }
-
-    @Override public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(this.getActivity(), RecipientIdeasActivity.class);
-        intent.putExtra("recipient", ((TextView) v).getText().toString());
-        startActivity(intent);
     }
 
     private Cursor cursor() {
         SQLiteDatabase rdb = database.getReadableDatabase();
-        return rdb.query(TABLE_NAME, new String[]{_ID, NAME}, null, null, null, null, NAME + " ASC");
+        Cursor cursor = rdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{_ID}, Database.RecipientsTable.NAME + "=?", new String[]{recipientName}, null, null, null, "1");
+        String recipientId = "";
+        if(cursor.moveToFirst()) {
+            recipientId = cursor.getString(0);
+        }
+        return rdb.query(TABLE_NAME, new String[]{_ID, IDEA}, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IDEA + " ASC");
     }
 }
