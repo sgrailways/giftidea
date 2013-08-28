@@ -1,11 +1,10 @@
-package com.sgrailways;
+package com.sgrailways.giftidea;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.sgrailways.giftidea.IdeaActivity;
-import com.sgrailways.giftidea.RecipientsList;
+import com.sgrailways.R;
 import roboguice.activity.RoboFragmentActivity;
 
 public class HelloAndroidActivity extends RoboFragmentActivity {

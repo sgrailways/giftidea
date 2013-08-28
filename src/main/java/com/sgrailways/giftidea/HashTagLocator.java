@@ -1,4 +1,4 @@
-package com.sgrailways;
+package com.sgrailways.giftidea;
 
 import com.google.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
