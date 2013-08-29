@@ -11,7 +11,6 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.google.inject.Inject;
-import com.sgrailways.R;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;

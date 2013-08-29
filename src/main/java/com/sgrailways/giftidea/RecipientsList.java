@@ -22,7 +22,7 @@ import static com.sgrailways.giftidea.Database.RecipientsTable.TABLE_NAME;
 
 public class RecipientsList extends RoboListFragment {
     @Inject Database database;
-    @InjectResource(com.sgrailways.R.string.no_recipients_message) String noRecipientsMessage;
+    @InjectResource(com.sgrailways.giftidea.R.string.no_recipients_message) String noRecipientsMessage;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ListAdapter adapter = new SimpleCursorAdapter(
@@ -39,7 +39,7 @@ public class RecipientsList extends RoboListFragment {
     @Override public void onResume() {
         ((SimpleCursorAdapter) getListAdapter()).swapCursor(cursor());
         setEmptyText(noRecipientsMessage);
-        getActivity().setTitle(com.sgrailways.R.string.gift_recipients_title);
+        getActivity().setTitle(com.sgrailways.giftidea.R.string.gift_recipients_title);
         super.onResume();
     }
 

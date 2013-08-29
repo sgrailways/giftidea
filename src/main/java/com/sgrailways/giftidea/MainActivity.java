@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.sgrailways.R;
 import roboguice.activity.RoboFragmentActivity;
 
 public class MainActivity extends RoboFragmentActivity {
@@ -18,7 +17,7 @@ public class MainActivity extends RoboFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.sgrailways.R.menu.main, menu);
+        getMenuInflater().inflate(com.sgrailways.giftidea.R.menu.main, menu);
         return true;
     }
 
@@ -26,6 +25,9 @@ public class MainActivity extends RoboFragmentActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 startActivity(new Intent(this, IdeaActivity.class));
+                return true;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

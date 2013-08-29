@@ -21,7 +21,7 @@ import static com.sgrailways.giftidea.Database.IdeasTable.TABLE_NAME;
 
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Database database;
-    @InjectResource(com.sgrailways.R.string.app_name) String appName;
+    @InjectResource(com.sgrailways.giftidea.R.string.app_name) String appName;
     private String recipientName;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

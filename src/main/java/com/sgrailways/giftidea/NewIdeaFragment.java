@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
-import com.sgrailways.R;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboFragment;

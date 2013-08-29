@@ -2,7 +2,6 @@ package com.sgrailways.giftidea;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import com.sgrailways.R;
 import roboguice.activity.RoboFragmentActivity;
 
 public class IdeaActivity extends RoboFragmentActivity {
