@@ -38,6 +38,7 @@ public class EditIdeaFragment extends RoboFragment {
         Cursor cursor = rdb.query(Database.IdeasTable.TABLE_NAME, new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA}, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(ideaId)}, null, null, null, "1");
         cursor.moveToFirst();
         idea.setText(cursor.getString(1));
+        hasAppropriateLength = StringUtils.isNotEmpty(idea.getText().toString());
         cursor.close();
         idea.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
