@@ -21,9 +21,13 @@
   <string name="new_idea_title">New GiftIdea!</string>
   <string name="edit_idea_title">Edit GiftIdea!</string>
   <string name="action_about">About</string>
-  <string name="who_is">Steve is an Android and enterprise Java developer that would love to hear from you.</string>
-  <string name="contact">Tweet @sghill or email sghill@sgrailways.com.</string>
-  <string name="blog">He blogs about development at http://dev.sghill.net.</string>
+  <string name="who_is">Built by Steve, an Android and web developer who is excited to hear from you.</string>
   <string name="about_title">About GiftIdea!</string>
+  <string name="twitter"><a href="https://twitter.com/sghill">@sghill</a></string>
+  <string name="twitter_label">Twitter</string>
+  <string name="email_label">Email</string>
+  <string name="email"><a href="#">sghill@sgrailways.com</a></string>
+  <string name="blog_label">Blog</string>
+  <string name="blog"><a href="http://dev.sghill.net">http://dev.sghill.net</a></string>
 
 </resources>

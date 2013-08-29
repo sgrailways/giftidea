@@ -10,18 +10,63 @@
   <TextView
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:text="@string/who_is"/>
+    android:text="@string/who_is" />
 
-  <TextView
+  <LinearLayout
+    android:orientation="horizontal"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:text="@string/contact"/>
+    android:padding="8dp">
 
-  <TextView
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/twitter_label"
+      android:layout_marginRight="5dp" />
+
+    <TextView
+      android:id="@+id/contact_twitter"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/twitter" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:orientation="horizontal"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:text="@string/blog"/>
+    android:padding="8dp">
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/email_label"
+      android:layout_marginRight="5dp" />
+
+    <TextView
+      android:id="@+id/contact_email"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/email" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="8dp">
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/blog_label"
+      android:layout_marginRight="5dp" />
+
+    <TextView
+      android:id="@+id/contact_blog"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/blog" />
+  </LinearLayout>
 
 </LinearLayout>
