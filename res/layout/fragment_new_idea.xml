@@ -8,9 +8,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="top|left"
-    android:lines="8"
-    android:minLines="8"
-    android:maxLines="10"
+    android:lines="3"
+    android:minLines="2"
+    android:maxLines="5"
     android:scrollbars="vertical"
     android:inputType="textMultiLine"
     android:hint="@string/new_idea_hint" />
