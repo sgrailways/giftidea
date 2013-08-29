@@ -24,6 +24,7 @@ public class EditIdeaFragment extends RoboFragment {
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
+    @InjectResource(R.string.edit_idea_title) String editIdeaTitle;
     boolean hasAppropriateLength = false;
     private long ideaId;
 
@@ -33,6 +34,7 @@ public class EditIdeaFragment extends RoboFragment {
 
     @Override public void onResume() {
         super.onResume();
+        getActivity().setTitle(editIdeaTitle);
         Bundle extras = getActivity().getIntent().getExtras();
         ideaId = extras.getLong("ideaId", -1L);
         SQLiteDatabase rdb = database.getReadableDatabase();

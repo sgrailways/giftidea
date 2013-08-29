@@ -31,6 +31,7 @@ public class NewIdeaFragment extends RoboFragment {
     @InjectResource(R.string.gift_ideas) String giftIdeas;
     @InjectResource(R.string.no_hash_tags_message) String noHashTagsMessage;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
+    @InjectResource(R.string.new_idea_title) String newIdeaTitle;
     Joiner joiner = Joiner.on(", ");
     boolean hasHashTags = false;
     boolean hasAppropriateLength = false;
@@ -40,7 +41,7 @@ public class NewIdeaFragment extends RoboFragment {
     }
 
     @Override public void onResume() {
-        super.onResume();
+        getActivity().setTitle(newIdeaTitle);
         idea.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -57,6 +58,7 @@ public class NewIdeaFragment extends RoboFragment {
                 recipients.setText(joiner.join(hashTags));
             }
         });
+        super.onResume();
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

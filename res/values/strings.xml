@@ -21,5 +21,7 @@
   <string name="action_delete">Delete</string>
   <string name="gift_recipients_title">GiftIdea! Recipients</string>
   <string name="ideas_for_title">GiftIdeas! For</string>
+  <string name="new_idea_title">New GiftIdea!</string>
+  <string name="edit_idea_title">Edit GiftIdea!</string>
 
 </resources>
