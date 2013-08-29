@@ -39,6 +39,7 @@ public class RecipientsList extends RoboListFragment {
     @Override public void onResume() {
         ((SimpleCursorAdapter) getListAdapter()).swapCursor(cursor());
         setEmptyText(noRecipientsMessage);
+        getActivity().setTitle(com.sgrailways.R.string.gift_recipients_title);
         super.onResume();
     }
 

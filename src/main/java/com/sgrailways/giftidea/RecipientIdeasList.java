@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.google.inject.Inject;
 import roboguice.fragment.RoboListFragment;
+import roboguice.inject.InjectResource;
 
 import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.Database.IdeasTable.IDEA;
@@ -20,6 +21,7 @@ import static com.sgrailways.giftidea.Database.IdeasTable.TABLE_NAME;
 
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Database database;
+    @InjectResource(com.sgrailways.R.string.app_name) String appName;
     private String recipientName;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +38,12 @@ public class RecipientIdeasList extends RoboListFragment {
     }
 
     @Override public void onResume() {
-        ((SimpleCursorAdapter) getListAdapter()).swapCursor(cursor());
+        Cursor c = cursor();
+        if(c.getCount() == 0) {
+            getActivity().finish();
+        }
+        ((SimpleCursorAdapter) getListAdapter()).swapCursor(c);
+        getActivity().setTitle(recipientName + " " + appName);
         super.onResume();
     }
 

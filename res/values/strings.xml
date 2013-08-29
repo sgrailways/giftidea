@@ -19,5 +19,7 @@
   <string name="no_recipients_message">No ideas yet! Add one now :)</string>
   <string name="recipients">Recipients</string>
   <string name="action_delete">Delete</string>
+  <string name="gift_recipients_title">GiftIdea! Recipients</string>
+  <string name="ideas_for_title">GiftIdeas! For</string>
 
 </resources>
