@@ -27,6 +27,7 @@ public class Database extends SQLiteOpenHelper {
                 .append(IdeasTable._ID).append(" integer primary key autoincrement,")
                 .append(IdeasTable.RECIPIENT_ID).append(" integer,")
                 .append(IdeasTable.IDEA).append(" text,")
+                .append(IdeasTable.IS_DONE).append(" text,")
                 .append(IdeasTable.CREATED_AT).append(" text,")
                 .append(IdeasTable.UPDATED_AT).append(" text)").toString();
 
@@ -47,6 +48,7 @@ public class Database extends SQLiteOpenHelper {
         public final static String TABLE_NAME = "ideas";
         public final static String RECIPIENT_ID = "recipient_id";
         public final static String IDEA = "idea";
+        public final static String IS_DONE = "is_done";
         public final static String CREATED_AT = "created_at";
         public final static String UPDATED_AT = "updated_at";
     }
