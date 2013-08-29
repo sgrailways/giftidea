@@ -18,5 +18,6 @@
   <string name="editing_for_label">Editing GiftIdea for</string>
   <string name="no_recipients_message">No ideas yet! Add one now :)</string>
   <string name="recipients">Recipients</string>
+  <string name="action_delete">Delete</string>
 
 </resources>
