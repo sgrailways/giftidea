@@ -37,14 +37,14 @@ public class Database extends SQLiteOpenHelper {
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
 
-    static class RecipientsTable implements BaseColumns {
+    public static class RecipientsTable implements BaseColumns {
         public final static String TABLE_NAME = "recipients";
         public final static String NAME = "name";
         public final static String CREATED_AT = "created_at";
         public final static String UPDATED_AT = "updated_at";
     }
 
-    static class IdeasTable implements BaseColumns {
+    public static class IdeasTable implements BaseColumns {
         public final static String TABLE_NAME = "ideas";
         public final static String RECIPIENT_ID = "recipient_id";
         public final static String IDEA = "idea";

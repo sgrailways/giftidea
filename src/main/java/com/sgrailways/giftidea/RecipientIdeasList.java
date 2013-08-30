@@ -1,6 +1,8 @@
 package com.sgrailways.giftidea;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,15 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Ideas;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.Database.IdeasTable.IDEA;
-import static com.sgrailways.giftidea.Database.IdeasTable.IS_DONE;
-import static com.sgrailways.giftidea.Database.IdeasTable.TABLE_NAME;
+import static com.sgrailways.giftidea.Database.IdeasTable.*;
 
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Database database;
@@ -49,6 +50,26 @@ public class RecipientIdeasList extends RoboListFragment {
                 if (Boolean.parseBoolean(cursor.getString(2))) {
                     gotIt.setVisibility(View.GONE);
                     idea.setPaintFlags(idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    idea.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(RecipientIdeasList.this.getActivity())
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            new Ideas(database).delete(id);
+                                            Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.finished_idea_deleted_message, Toast.LENGTH_SHORT).show();
+                                            ((RecipientIdeasActivity) getActivity()).onResume();
+                                        }
+                                    })
+                                    .setTitle(R.string.confirmation)
+                                    .setMessage("Delete idea for " + recipientName + "?");
+                            alert.create().show();
+                        }
+                    });
                 } else {
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -78,8 +99,13 @@ public class RecipientIdeasList extends RoboListFragment {
     }
 
     @Override public void onResume() {
-        getActivity().setTitle(recipientName + " " + appName);
         super.onResume();
+        Ideas.Remaining remaining = new Ideas(database).forRecipient(recipientName);
+        if (remaining == Ideas.Remaining.YES) {
+            getActivity().setTitle(recipientName + " " + appName);
+        } else if (remaining == Ideas.Remaining.NO) {
+            getActivity().finish();
+        }
     }
 
     private Cursor cursor() {

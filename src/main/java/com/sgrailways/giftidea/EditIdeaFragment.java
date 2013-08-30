@@ -2,7 +2,6 @@ package com.sgrailways.giftidea;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +10,7 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Ideas;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
@@ -83,22 +83,7 @@ public class EditIdeaFragment extends RoboFragment {
                 }
                 return true;
             case R.id.action_delete:
-                SQLiteDatabase wdb = database.getWritableDatabase();
-                try {
-                    wdb.beginTransaction();
-                    Cursor cursor = wdb.query(Database.IdeasTable.TABLE_NAME, new String[]{Database.IdeasTable.RECIPIENT_ID}, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(ideaId)}, null, null, null);
-                    cursor.moveToFirst();
-                    long recipientId = cursor.getLong(0);
-                    cursor.close();
-                    wdb.delete(Database.IdeasTable.TABLE_NAME, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(ideaId)});
-                    long ideasForRecipient = DatabaseUtils.queryNumEntries(wdb, Database.IdeasTable.TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
-                    if(ideasForRecipient == 0) {
-                        wdb.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
-                    }
-                    wdb.setTransactionSuccessful();
-                } finally {
-                    wdb.endTransaction();
-                }
+                new Ideas(database).delete(ideaId);
                 getActivity().finish();
                 return true;
             default:
