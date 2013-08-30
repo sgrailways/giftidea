@@ -17,7 +17,8 @@
     android:layout_alignParentLeft="true"
     android:layout_toLeftOf="@+id/got_it"
     android:clickable="true"
-    android:background="@drawable/highlight"/>
+    android:background="@drawable/highlight"
+    android:textAppearance="?android:textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/got_it"
