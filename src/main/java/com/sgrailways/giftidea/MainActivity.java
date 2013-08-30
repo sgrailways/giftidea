@@ -33,5 +33,10 @@ public class MainActivity extends RoboFragmentActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override protected void onResume() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
+        super.onResume();
+    }
 }
 
