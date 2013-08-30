@@ -29,5 +29,6 @@
   <string name="email"><a href="#">sghill@sgrailways.com</a></string>
   <string name="blog_label">Blog</string>
   <string name="blog"><a href="http://dev.sghill.net">http://dev.sghill.net</a></string>
+  <string name="got_it">GOT IT</string>
 
 </resources>

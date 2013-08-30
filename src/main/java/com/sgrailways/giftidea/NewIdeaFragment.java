@@ -76,6 +76,7 @@ public class NewIdeaFragment extends RoboFragment {
                     String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
                     ContentValues ideaValues = new ContentValues();
                     ideaValues.put(Database.IdeasTable.IDEA, hashTagLocator.removeAllFrom(idea.getText().toString()));
+                    ideaValues.put(Database.IdeasTable.IS_DONE, String.valueOf(false));
                     ideaValues.put(Database.IdeasTable.CREATED_AT, now);
                     ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
                     SQLiteDatabase wdb = database.getWritableDatabase();
