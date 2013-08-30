@@ -4,6 +4,7 @@
     android:id="@+id/action_create"
     android:orderInCategory="100"
     android:showAsAction="always"
+    android:icon="@drawable/highlight"
     android:title="@string/action_create"/>
 
 </menu>

@@ -4,12 +4,14 @@
     android:id="@+id/action_update"
     android:orderInCategory="100"
     android:showAsAction="always"
+    android:icon="@drawable/highlight"
     android:title="@string/action_update"/>
 
   <item
     android:id="@+id/action_delete"
     android:orderInCategory="200"
     android:showAsAction="never"
+    android:icon="@drawable/highlight"
     android:title="@string/action_delete"/>
 
 </menu>
