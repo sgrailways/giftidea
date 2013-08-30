@@ -13,7 +13,8 @@
     android:maxLines="5"
     android:scrollbars="vertical"
     android:inputType="textMultiLine"
-    android:hint="@string/new_idea_hint" />
+    android:hint="@string/new_idea_hint"
+    android:imeOptions="actionDone"/>
 
   <LinearLayout
     android:orientation="horizontal"
