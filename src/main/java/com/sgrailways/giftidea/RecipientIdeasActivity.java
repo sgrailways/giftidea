@@ -24,6 +24,7 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
+                finish();
                 startActivity(new Intent(this, IdeaActivity.class));
                 return true;
             case R.id.action_about:
