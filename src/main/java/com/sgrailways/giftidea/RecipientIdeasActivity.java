@@ -26,6 +26,9 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
             case R.id.action_add:
                 startActivity(new Intent(this, IdeaActivity.class));
                 return true;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
