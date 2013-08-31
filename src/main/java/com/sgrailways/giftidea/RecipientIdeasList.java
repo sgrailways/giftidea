@@ -78,7 +78,7 @@ public class RecipientIdeasList extends RoboListFragment {
                             values.put(Database.IdeasTable.IS_DONE, String.valueOf(true));
                             values.put(Database.IdeasTable.UPDATED_AT, DateTime.now().toString(ISODateTimeFormat.basicDateTime()));
                             wdb.update(Database.IdeasTable.TABLE_NAME, values, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
-                            Toast.makeText(RecipientIdeasList.this.getActivity(), "Got that idea!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
                             ((RecipientIdeasActivity) getActivity()).onResume();
                         }
                     });
