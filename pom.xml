@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sgrailways</groupId>
   <artifactId>giftidea</artifactId>
   <version>1.1-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>giftidea</name>
+
+  <distributionManagement>
+    <repository>
+      <id>local-repository</id>
+      <url>file:///usr/local/repo/</url>
+    </repository>
+  </distributionManagement>
 
   <scm>
     <url>https://bitbucket.org/sghill/giftidea</url>
@@ -105,7 +113,7 @@
             <debuggable>true</debuggable>
           </manifest>
           <sdk>
-            <platform>14</platform>
+            <platform>16</platform>
           </sdk>
           <emulator>
             <avd>giftidea</avd>
