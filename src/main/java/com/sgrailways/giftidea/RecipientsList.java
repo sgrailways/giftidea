@@ -10,15 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Database;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.Database.RecipientsTable.NAME;
-import static com.sgrailways.giftidea.Database.RecipientsTable.TABLE_NAME;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.TABLE_NAME;
 
 public class RecipientsList extends RoboListFragment {
-    @Inject Database database;
+    @Inject
+    Database database;
     @InjectResource(com.sgrailways.giftidea.R.string.no_recipients_message) String noRecipientsMessage;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

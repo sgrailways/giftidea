@@ -3,7 +3,6 @@ package com.sgrailways.giftidea.db;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import com.sgrailways.giftidea.Database;
 
 public class Ideas {
     private final Database database;

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Database;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboFragment;
@@ -20,7 +21,8 @@ import roboguice.inject.InjectView;
 import java.util.LinkedHashSet;
 
 public class NewIdeaFragment extends RoboFragment {
-    @Inject Database database;
+    @Inject
+    Database database;
     @Inject HashTagLocator hashTagLocator;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipients_view) TextView recipients;

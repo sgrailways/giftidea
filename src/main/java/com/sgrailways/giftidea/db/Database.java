@@ -1,4 +1,4 @@
-package com.sgrailways.giftidea;
+package com.sgrailways.giftidea.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

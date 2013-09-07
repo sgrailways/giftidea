@@ -10,6 +10,7 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -19,7 +20,8 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 public class EditIdeaFragment extends RoboFragment {
-    @Inject Database database;
+    @Inject
+    Database database;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;

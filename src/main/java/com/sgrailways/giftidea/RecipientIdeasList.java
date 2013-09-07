@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
@@ -22,10 +23,11 @@ import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.Database.IdeasTable.*;
+import static com.sgrailways.giftidea.db.Database.IdeasTable.*;
 
 public class RecipientIdeasList extends RoboListFragment {
-    @Inject Database database;
+    @Inject
+    Database database;
     @InjectResource(R.string.app_name) String appName;
     private String recipientName;
 
