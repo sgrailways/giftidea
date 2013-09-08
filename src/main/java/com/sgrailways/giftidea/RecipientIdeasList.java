@@ -87,10 +87,7 @@ public class RecipientIdeasList extends RoboListFragment {
 
                             Recipient recipient = recipients.findByName(recipientName);
                             if(!(recipient instanceof MissingRecipient)) {
-                                long ideasCount = recipient.getIdeaCount();
-                                ContentValues recipientValues = new ContentValues();
-                                recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, --ideasCount);
-                                wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipient.getId())});
+                                recipients.decrementIdeaCountFor(recipient);
                             }
 
                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();

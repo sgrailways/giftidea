@@ -21,6 +21,16 @@ public class Recipients {
         this.writeableDatabase = database.getWritableDatabase();
     }
 
+    public Recipient findById(long id) {
+        Cursor cursor = writeableDatabase.query(TABLE_NAME, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null, null, null, "1");
+        if(!cursor.moveToFirst()) {
+            return new MissingRecipient();
+        }
+        Recipient recipient = new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
+        cursor.close();
+        return recipient;
+    }
+
     public Recipient findByName(String name) {
         Cursor cursor = writeableDatabase.query(TABLE_NAME, COLUMNS, NAME + "=?", new String[]{name}, null, null, null, "1");
         if(!cursor.moveToFirst()) {
@@ -46,12 +56,19 @@ public class Recipients {
         return new Recipient(id, name, 1L);
     }
 
+    public Recipient incrementIdeaCountFor(Recipient recipient) {
+        return changeIdeaCountFor(recipient, recipient.getIdeaCount() + 1L);
+    }
+
+    public Recipient decrementIdeaCountFor(Recipient recipient) {
+        return changeIdeaCountFor(recipient, recipient.getIdeaCount() - 1L);
+    }
+
     private static String now() {
         return DateTime.now().toString(ISODateTimeFormat.basicDateTime());
     }
 
-    public Recipient incrementIdeaCountFor(Recipient recipient) {
-        long newIdeaCount = recipient.getIdeaCount() + 1L;
+    private Recipient changeIdeaCountFor(Recipient recipient, long newIdeaCount) {
         ContentValues values = new ContentValues();
         values.put(Database.RecipientsTable.UPDATED_AT, now());
         values.put(Database.RecipientsTable.IDEAS_COUNT, newIdeaCount);
