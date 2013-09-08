@@ -19,7 +19,7 @@
     android:id="@+id/ideas_count"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="@android:color/secondary_text_dark"
+    android:textColor="@android:color/secondary_text_light"
     android:text="@string/zero"
     android:layout_below="@+id/name"/>
 
@@ -29,6 +29,6 @@
     android:layout_marginLeft="4dp"
     android:layout_toRightOf="@+id/ideas_count"
     android:layout_alignBottom="@+id/ideas_count"
-    android:textColor="@android:color/secondary_text_dark"
+    android:textColor="@android:color/secondary_text_light"
     android:text="@string/ideas_label"/>
 </RelativeLayout>
