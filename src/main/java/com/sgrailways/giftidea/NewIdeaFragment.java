@@ -91,17 +91,13 @@ public class NewIdeaFragment extends RoboFragment {
                             Recipient recipient = recipientsRepository.findByName(hashTag);
                             long recipientId;
                             ContentValues recipientValues = new ContentValues();
-                            if (!(recipient instanceof MissingRecipient)) {
+                            if (recipient instanceof MissingRecipient) {
+                                recipientId = recipientsRepository.createFromName(hashTag).getId();
+                            } else {
                                 recipientId = recipient.getId();
                                 long recipientIdeasCount = recipient.getIdeaCount();
                                 recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, ++recipientIdeasCount);
                                 wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
-                            } else {
-                                recipientValues.put(Database.RecipientsTable.NAME, hashTag);
-                                recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, 1);
-                                recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
-                                recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
-                                recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
                             }
                             ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
                             wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
