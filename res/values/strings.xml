@@ -35,7 +35,8 @@
   <string name="finished_idea_deleted_message">Deleted</string>
   <string name="confirmation">Confirm</string>
   <string name="got_it_message">Got that idea!</string>
-    <string name="ideas_label">ideas</string>
-    <string name="idea_label">idea</string>
+  <string name="ideas_label">ideas</string>
+  <string name="idea_label">idea</string>
+  <string name="edit_idea_hint">Hummingbird feeder</string>
 
 </resources>
