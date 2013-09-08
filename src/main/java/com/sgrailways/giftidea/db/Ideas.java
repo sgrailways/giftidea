@@ -6,9 +6,16 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.Clock;
+import com.sgrailways.giftidea.HashTagLocator;
 import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.giftidea.domain.MissingIdea;
+import com.sgrailways.giftidea.domain.MissingRecipient;
+import com.sgrailways.giftidea.domain.Recipient;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+
+import java.util.LinkedHashSet;
 
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
@@ -17,10 +24,12 @@ public class Ideas {
     private final Database database;
     private final Recipients recipients;
     private final Clock clock;
+    private final HashTagLocator hashTagLocator;
     private final static String[] COLUMNS = new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA};
 
     @Inject
-    public Ideas(Database database, Recipients recipients, Clock clock) {
+    public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
+        this.hashTagLocator = hashTagLocator;
         this.writeableDatabase = database.getWritableDatabase();
         this.database = database;
         this.recipients = recipients;
@@ -81,6 +90,35 @@ public class Ideas {
             writeableDatabase.setTransactionSuccessful();
         } finally {
             writeableDatabase.endTransaction();
+        }
+    }
+
+    public void createFromText(String idea) {
+        String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
+        ContentValues ideaValues = new ContentValues();
+        ideaValues.put(Database.IdeasTable.IDEA, hashTagLocator.removeAllFrom(idea));
+        ideaValues.put(Database.IdeasTable.IS_DONE, String.valueOf(false));
+        ideaValues.put(Database.IdeasTable.CREATED_AT, now);
+        ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
+        SQLiteDatabase wdb = database.getWritableDatabase();
+        LinkedHashSet<String> hashTags = hashTagLocator.findAllIn(idea);
+        try {
+            wdb.beginTransaction();
+            for (String hashTag : hashTags) {
+                Recipient recipient = recipients.findByName(hashTag);
+                long recipientId;
+                if (recipient instanceof MissingRecipient) {
+                    recipientId = recipients.createFromName(hashTag).getId();
+                } else {
+                    recipientId = recipient.getId();
+                    recipients.incrementIdeaCountFor(recipient);
+                }
+                ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
+                wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
+            }
+            wdb.setTransactionSuccessful();
+        } finally {
+            wdb.endTransaction();
         }
     }
 
