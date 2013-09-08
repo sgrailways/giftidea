@@ -49,7 +49,8 @@ public class Database extends SQLiteOpenHelper {
                     String initializeCount = new StringBuilder("UPDATE ").append(RecipientsTable.TABLE_NAME)
                             .append(" SET ").append(RecipientsTable.IDEAS_COUNT).append("=(SELECT COUNT(*) FROM ")
                             .append(IdeasTable.TABLE_NAME).append(" WHERE ")
-                            .append(IdeasTable.RECIPIENT_ID).append("=").append(recipientId).append(") WHERE ")
+                            .append(IdeasTable.RECIPIENT_ID).append("=").append(recipientId)
+                            .append(" AND ").append(IdeasTable.IS_DONE).append("='false'").append(") WHERE ")
                             .append(RecipientsTable._ID).append("=").append(recipientId).toString();
                     db.execSQL(initializeCount);
                     cursor.moveToNext();
