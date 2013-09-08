@@ -63,7 +63,7 @@ public class Ideas {
             if (ideasForRecipient == 0) {
                 writeableDatabase.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
                 ideasRemaining = Remaining.NO;
-            } else if(activeIdeasForRecipient == 0) {
+            } else if(activeIdeasForRecipient > 0) {
                 recipients.decrementIdeaCountFor(recipients.findById(recipientId));
                 ideasRemaining = Remaining.YES;
             } else {
