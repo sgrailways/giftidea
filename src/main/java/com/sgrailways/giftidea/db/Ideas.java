@@ -20,7 +20,6 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
 public class Ideas {
     private final SQLiteDatabase writeableDatabase;
-    private final Database database;
     private final Recipients recipients;
     private final Clock clock;
     private final HashTagLocator hashTagLocator;
@@ -30,7 +29,6 @@ public class Ideas {
     public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
         this.hashTagLocator = hashTagLocator;
         this.writeableDatabase = database.getWritableDatabase();
-        this.database = database;
         this.recipients = recipients;
         this.clock = clock;
     }
@@ -79,10 +77,9 @@ public class Ideas {
     }
 
     public Remaining forRecipient(String recipientName) {
-        SQLiteDatabase wdb = database.getWritableDatabase();
         long recipientId = recipients.findByName(recipientName).getId();
         //TODO: remove this for api-10 compatibility
-        long ideasCount = DatabaseUtils.queryNumEntries(wdb, TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
+        long ideasCount = DatabaseUtils.queryNumEntries(writeableDatabase, TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
         return ideasCount == 0 ? Remaining.NO : Remaining.YES;
     }
 
@@ -106,10 +103,9 @@ public class Ideas {
         ideaValues.put(Database.IdeasTable.IS_DONE, String.valueOf(false));
         ideaValues.put(Database.IdeasTable.CREATED_AT, now);
         ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
-        SQLiteDatabase wdb = database.getWritableDatabase();
         LinkedHashSet<String> hashTags = hashTagLocator.findAllIn(idea);
         try {
-            wdb.beginTransaction();
+            writeableDatabase.beginTransaction();
             for (String hashTag : hashTags) {
                 Recipient recipient = recipients.findByName(hashTag);
                 long recipientId;
@@ -120,11 +116,11 @@ public class Ideas {
                     recipients.incrementIdeaCountFor(recipient);
                 }
                 ideaValues.put(Database.IdeasTable.RECIPIENT_ID, recipientId);
-                wdb.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
+                writeableDatabase.insert(Database.IdeasTable.TABLE_NAME, null, ideaValues);
             }
-            wdb.setTransactionSuccessful();
+            writeableDatabase.setTransactionSuccessful();
         } finally {
-            wdb.endTransaction();
+            writeableDatabase.endTransaction();
         }
     }
 
