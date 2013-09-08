@@ -20,8 +20,8 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 public class EditIdeaFragment extends RoboFragment {
-    @Inject
-    Database database;
+    @Inject Database database;
+    @Inject Ideas ideas;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
@@ -85,7 +85,7 @@ public class EditIdeaFragment extends RoboFragment {
                 }
                 return true;
             case R.id.action_delete:
-                new Ideas(database).delete(ideaId);
+                ideas.delete(ideaId);
                 getActivity().finish();
                 return true;
             default:

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.db.Recipients;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboListFragment;
@@ -26,8 +27,9 @@ import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.*;
 
 public class RecipientIdeasList extends RoboListFragment {
-    @Inject
-    Database database;
+    @Inject Database database;
+    @Inject Ideas ideas;
+    @Inject Recipients recipients;
     @InjectResource(R.string.app_name) String appName;
     private String recipientName;
 
@@ -62,7 +64,7 @@ public class RecipientIdeasList extends RoboListFragment {
                                     })
                                     .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            new Ideas(database).delete(id);
+                                            ideas.delete(id);
                                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.finished_idea_deleted_message, Toast.LENGTH_SHORT).show();
                                             ((RecipientIdeasActivity) getActivity()).onResume();
                                         }
@@ -112,7 +114,7 @@ public class RecipientIdeasList extends RoboListFragment {
 
     @Override public void onResume() {
         super.onResume();
-        Ideas.Remaining remaining = new Ideas(database).forRecipient(recipientName);
+        Ideas.Remaining remaining = ideas.forRecipient(recipientName);
         if (remaining == Ideas.Remaining.YES) {
             getActivity().setTitle(recipientName + " " + appName);
         } else if (remaining == Ideas.Remaining.NO) {
@@ -122,11 +124,7 @@ public class RecipientIdeasList extends RoboListFragment {
 
     private Cursor cursor() {
         SQLiteDatabase rdb = database.getReadableDatabase();
-        Cursor cursor = rdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{_ID}, Database.RecipientsTable.NAME + "=?", new String[]{recipientName}, null, null, null, "1");
-        String recipientId = "";
-        if (cursor.moveToFirst()) {
-            recipientId = cursor.getString(0);
-        }
+        String recipientId = String.valueOf(recipients.findIdByName(recipientName));
         return rdb.query(TABLE_NAME, new String[]{_ID, IDEA, IS_DONE}, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IS_DONE + " ASC");
     }
 }
