@@ -12,11 +12,10 @@ import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.LinkedHashSet;
 
+import static com.sgrailways.giftidea.db.Database.IdeasTable.IS_DONE;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
 public class Ideas {
@@ -25,7 +24,7 @@ public class Ideas {
     private final Recipients recipients;
     private final Clock clock;
     private final HashTagLocator hashTagLocator;
-    private final static String[] COLUMNS = new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA};
+    private final static String[] COLUMNS = new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA, Database.IdeasTable.IS_DONE};
 
     @Inject
     public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
@@ -44,6 +43,11 @@ public class Ideas {
         Idea idea = new Idea(cursor.getLong(0), cursor.getString(1));
         cursor.close();
         return idea;
+    }
+
+    public Cursor findAllForRecipientName(String name) {
+        String recipientId = String.valueOf(recipients.findByName(name).getId());
+        return writeableDatabase.query(TABLE_NAME, COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IS_DONE + " ASC");
     }
 
     public Remaining delete(long id) {
@@ -94,7 +98,7 @@ public class Ideas {
     }
 
     public void createFromText(String idea) {
-        String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
+        String now = clock.now();
         ContentValues ideaValues = new ContentValues();
         ideaValues.put(Database.IdeasTable.IDEA, hashTagLocator.removeAllFrom(idea));
         ideaValues.put(Database.IdeasTable.IS_DONE, String.valueOf(false));
@@ -119,6 +123,18 @@ public class Ideas {
             wdb.setTransactionSuccessful();
         } finally {
             wdb.endTransaction();
+        }
+    }
+
+    public void gotIt(long id, String recipientName) {
+        ContentValues values = new ContentValues();
+        values.put(Database.IdeasTable.IS_DONE, String.valueOf(true));
+        values.put(Database.IdeasTable.UPDATED_AT, clock.now());
+        writeableDatabase.update(Database.IdeasTable.TABLE_NAME, values, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
+
+        Recipient recipient = recipients.findByName(recipientName);
+        if(!(recipient instanceof MissingRecipient)) {
+            recipients.decrementIdeaCountFor(recipient);
         }
     }
 

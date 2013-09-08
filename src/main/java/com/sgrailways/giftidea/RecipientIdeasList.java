@@ -1,11 +1,9 @@
 package com.sgrailways.giftidea;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -15,23 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
-import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
-import com.sgrailways.giftidea.db.Recipients;
-import com.sgrailways.giftidea.domain.MissingRecipient;
-import com.sgrailways.giftidea.domain.Recipient;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
-import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.db.Database.IdeasTable.*;
+import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends RoboListFragment {
-    @Inject Database database;
     @Inject Ideas ideas;
-    @Inject Recipients recipients;
     @InjectResource(R.string.app_name) String appName;
     private String recipientName;
 
@@ -40,7 +29,7 @@ public class RecipientIdeasList extends RoboListFragment {
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 this.getActivity(),
                 R.layout.idea_item,
-                cursor(),
+                ideas.findAllForRecipientName(recipientName),
                 new String[]{IDEA},
                 new int[]{R.id.idea}
         );
@@ -79,17 +68,7 @@ public class RecipientIdeasList extends RoboListFragment {
                 } else {
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            SQLiteDatabase wdb = database.getWritableDatabase();
-                            ContentValues values = new ContentValues();
-                            values.put(Database.IdeasTable.IS_DONE, String.valueOf(true));
-                            values.put(Database.IdeasTable.UPDATED_AT, DateTime.now().toString(ISODateTimeFormat.basicDateTime()));
-                            wdb.update(Database.IdeasTable.TABLE_NAME, values, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
-
-                            Recipient recipient = recipients.findByName(recipientName);
-                            if(!(recipient instanceof MissingRecipient)) {
-                                recipients.decrementIdeaCountFor(recipient);
-                            }
-
+                            ideas.gotIt(id, recipientName);
                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
                             ((RecipientIdeasActivity) getActivity()).onResume();
                         }
@@ -118,11 +97,5 @@ public class RecipientIdeasList extends RoboListFragment {
         } else if (remaining == Ideas.Remaining.NO) {
             getActivity().finish();
         }
-    }
-
-    private Cursor cursor() {
-        SQLiteDatabase rdb = database.getReadableDatabase();
-        String recipientId = String.valueOf(recipients.findByName(recipientName).getId());
-        return rdb.query(TABLE_NAME, new String[]{_ID, IDEA, IS_DONE}, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IS_DONE + " ASC");
     }
 }
