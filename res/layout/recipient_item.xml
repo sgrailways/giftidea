@@ -24,6 +24,7 @@
     android:layout_below="@+id/name"/>
 
   <TextView
+    android:id="@+id/ideas_count_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"

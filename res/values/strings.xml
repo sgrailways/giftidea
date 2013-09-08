@@ -36,5 +36,6 @@
   <string name="confirmation">Confirm</string>
   <string name="got_it_message">Got that idea!</string>
     <string name="ideas_label">ideas</string>
+    <string name="idea_label">idea</string>
 
 </resources>

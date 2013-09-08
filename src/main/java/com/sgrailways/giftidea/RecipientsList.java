@@ -15,13 +15,12 @@ import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectResource;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.db.Database.RecipientsTable.IDEAS_COUNT;
-import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
-import static com.sgrailways.giftidea.db.Database.RecipientsTable.TABLE_NAME;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.*;
 
 public class RecipientsList extends RoboListFragment {
     @Inject Database database;
     @InjectResource(com.sgrailways.giftidea.R.string.no_recipients_message) String noRecipientsMessage;
+    @InjectResource(R.string.idea_label) String singularIdeaLabel;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
@@ -40,7 +39,12 @@ public class RecipientsList extends RoboListFragment {
                     return false;
                 }
                 name.setText(cursor.getString(1));
-                count.setText(String.valueOf(cursor.getLong(2)));
+                long ideasCount = cursor.getLong(2);
+                count.setText(String.valueOf(ideasCount));
+                if(ideasCount == 1L) {
+                    TextView ideasLabel = (TextView) rootView.findViewById(R.id.ideas_count_label);
+                    ideasLabel.setText(singularIdeaLabel);
+                }
                 rootView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent intent = new Intent(RecipientsList.this.getActivity(), RecipientIdeasActivity.class);
