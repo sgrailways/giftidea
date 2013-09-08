@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea.db;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,6 +27,12 @@ public class Ideas {
                 wdb.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
                 ideasRemaining = Remaining.NO;
             } else {
+                Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID, Database.RecipientsTable.IDEAS_COUNT}, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)}, null, null, null);
+                query.moveToFirst();
+                long ideasCount = query.getLong(1);
+                ContentValues recipientValues = new ContentValues();
+                recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, --ideasCount);
+                wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
                 ideasRemaining = Remaining.YES;
             }
             wdb.setTransactionSuccessful();
