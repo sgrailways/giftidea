@@ -40,7 +40,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion == 1 && newVersion == 2) {
-            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS IDX_RECIPIENTS_NAME ON " + RecipientsTable.TABLE_NAME + "(" + RecipientsTable.NAME + ")");
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS IDX_RECIPIENTS_NAME ON " + RecipientsTable.TABLE_NAME + " (" + RecipientsTable.NAME + ")");
             db.execSQL("ALTER TABLE " + RecipientsTable.TABLE_NAME + " ADD COLUMN " + RecipientsTable.IDEAS_COUNT + " integer");
             Cursor cursor = db.query(RecipientsTable.TABLE_NAME, new String[]{RecipientsTable._ID}, null, null, null, null, null);
             if(cursor.moveToFirst()) {
@@ -50,7 +50,7 @@ public class Database extends SQLiteOpenHelper {
                             .append(" SET ").append(RecipientsTable.IDEAS_COUNT).append("=(SELECT COUNT(*) FROM ")
                             .append(IdeasTable.TABLE_NAME).append(" WHERE ")
                             .append(IdeasTable.RECIPIENT_ID).append("=").append(recipientId).append(") WHERE ")
-                            .append(RecipientsTable._ID).append("=").append(recipientId).append(")").toString();
+                            .append(RecipientsTable._ID).append("=").append(recipientId).toString();
                     db.execSQL(initializeCount);
                     cursor.moveToNext();
                 }
