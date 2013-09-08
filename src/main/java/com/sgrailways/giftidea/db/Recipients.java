@@ -4,20 +4,21 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.GiftIdeaFormat;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.*;
 
 public class Recipients {
     private final static String[] COLUMNS = new String[]{_ID, NAME, IDEAS_COUNT};
-    private SQLiteDatabase writeableDatabase;
+    private final GiftIdeaFormat giftIdeaFormat;
+    private final SQLiteDatabase writeableDatabase;
 
     @Inject
-    public Recipients(Database database) {
+    public Recipients(Database database, GiftIdeaFormat giftIdeaFormat) {
+        this.giftIdeaFormat = giftIdeaFormat;
         this.writeableDatabase = database.getWritableDatabase();
     }
 
@@ -46,7 +47,7 @@ public class Recipients {
     }
 
     public Recipient createFromName(String name) {
-        String now = now();
+        String now = giftIdeaFormat.now();
         ContentValues values = new ContentValues();
         values.put(Database.RecipientsTable.NAME, name);
         values.put(Database.RecipientsTable.IDEAS_COUNT, 1L);
@@ -64,13 +65,9 @@ public class Recipients {
         return changeIdeaCountFor(recipient, recipient.getIdeaCount() - 1L);
     }
 
-    private static String now() {
-        return DateTime.now().toString(ISODateTimeFormat.basicDateTime());
-    }
-
     private Recipient changeIdeaCountFor(Recipient recipient, long newIdeaCount) {
         ContentValues values = new ContentValues();
-        values.put(Database.RecipientsTable.UPDATED_AT, now());
+        values.put(Database.RecipientsTable.UPDATED_AT, giftIdeaFormat.now());
         values.put(Database.RecipientsTable.IDEAS_COUNT, newIdeaCount);
         writeableDatabase.update(TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
         return new Recipient(recipient.getId(), recipient.getName(), newIdeaCount);

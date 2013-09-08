@@ -4,15 +4,18 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.GiftIdeaFormat;
 
 public class Ideas {
-    private Database database;
-    private Recipients recipients;
+    private final Database database;
+    private final Recipients recipients;
+    private final GiftIdeaFormat giftIdeaFormat;
 
     @Inject
-    public Ideas(Database database, Recipients recipients) {
+    public Ideas(Database database, Recipients recipients, GiftIdeaFormat giftIdeaFormat) {
         this.database = database;
         this.recipients = recipients;
+        this.giftIdeaFormat = giftIdeaFormat;
     }
 
     public Remaining delete(long id) {
