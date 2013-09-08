@@ -18,6 +18,8 @@ import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.db.Recipients;
+import com.sgrailways.giftidea.domain.MissingRecipient;
+import com.sgrailways.giftidea.domain.Recipient;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboListFragment;
@@ -83,13 +85,12 @@ public class RecipientIdeasList extends RoboListFragment {
                             values.put(Database.IdeasTable.UPDATED_AT, DateTime.now().toString(ISODateTimeFormat.basicDateTime()));
                             wdb.update(Database.IdeasTable.TABLE_NAME, values, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
 
-                            Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID, Database.RecipientsTable.IDEAS_COUNT}, Database.RecipientsTable.NAME + "=?", new String[]{recipientName}, null, null, null);
-                            if(query.moveToFirst()) {
-                                long recipientId = query.getLong(0);
-                                long ideasCount = query.getLong(1);
+                            Recipient recipient = recipients.findByName(recipientName);
+                            if(!(recipient instanceof MissingRecipient)) {
+                                long ideasCount = recipient.getIdeaCount();
                                 ContentValues recipientValues = new ContentValues();
                                 recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, --ideasCount);
-                                wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
+                                wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipient.getId())});
                             }
 
                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
@@ -124,7 +125,7 @@ public class RecipientIdeasList extends RoboListFragment {
 
     private Cursor cursor() {
         SQLiteDatabase rdb = database.getReadableDatabase();
-        String recipientId = String.valueOf(recipients.findIdByName(recipientName));
+        String recipientId = String.valueOf(recipients.findByName(recipientName).getId());
         return rdb.query(TABLE_NAME, new String[]{_ID, IDEA, IS_DONE}, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IS_DONE + " ASC");
     }
 }

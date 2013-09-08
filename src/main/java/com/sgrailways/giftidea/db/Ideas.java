@@ -49,7 +49,7 @@ public class Ideas {
 
     public Remaining forRecipient(String recipientName) {
         SQLiteDatabase wdb = database.getWritableDatabase();
-        long recipientId = recipients.findIdByName(recipientName);
+        long recipientId = recipients.findByName(recipientName).getId();
         //TODO: remove this for api-10 compatibility
         long ideasCount = DatabaseUtils.queryNumEntries(wdb, Database.IdeasTable.TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
         return ideasCount == 0 ? Remaining.NO : Remaining.YES;

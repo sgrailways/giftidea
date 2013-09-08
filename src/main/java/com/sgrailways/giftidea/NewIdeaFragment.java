@@ -1,7 +1,6 @@
 package com.sgrailways.giftidea;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +11,9 @@ import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Database;
+import com.sgrailways.giftidea.db.Recipients;
+import com.sgrailways.giftidea.domain.MissingRecipient;
+import com.sgrailways.giftidea.domain.Recipient;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboFragment;
@@ -21,8 +23,8 @@ import roboguice.inject.InjectView;
 import java.util.LinkedHashSet;
 
 public class NewIdeaFragment extends RoboFragment {
-    @Inject
-    Database database;
+    @Inject Database database;
+    @Inject Recipients recipientsRepository;
     @Inject HashTagLocator hashTagLocator;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipients_view) TextView recipients;
@@ -86,12 +88,12 @@ public class NewIdeaFragment extends RoboFragment {
                     try {
                         wdb.beginTransaction();
                         for (String hashTag : hashTags) {
-                            Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID, Database.RecipientsTable.IDEAS_COUNT}, Database.RecipientsTable.NAME + "=?", new String[]{hashTag}, null, null, null, "1");
+                            Recipient recipient = recipientsRepository.findByName(hashTag);
                             long recipientId;
                             ContentValues recipientValues = new ContentValues();
-                            if (query.moveToFirst()) {
-                                recipientId = query.getLong(0);
-                                long recipientIdeasCount = query.getLong(1);
+                            if (!(recipient instanceof MissingRecipient)) {
+                                recipientId = recipient.getId();
+                                long recipientIdeasCount = recipient.getIdeaCount();
                                 recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, ++recipientIdeasCount);
                                 wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
                             } else {
