@@ -36,7 +36,7 @@ public class Recipients {
     }
 
     public Recipient createFromName(String name) {
-        String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
+        String now = now();
         ContentValues values = new ContentValues();
         values.put(Database.RecipientsTable.NAME, name);
         values.put(Database.RecipientsTable.IDEAS_COUNT, 1L);
@@ -44,5 +44,18 @@ public class Recipients {
         values.put(Database.RecipientsTable.UPDATED_AT, now);
         long id = writeableDatabase.insert(Database.RecipientsTable.TABLE_NAME, null, values);
         return new Recipient(id, name, 1L);
+    }
+
+    private static String now() {
+        return DateTime.now().toString(ISODateTimeFormat.basicDateTime());
+    }
+
+    public Recipient incrementIdeaCountFor(Recipient recipient) {
+        long newIdeaCount = recipient.getIdeaCount() + 1L;
+        ContentValues values = new ContentValues();
+        values.put(Database.RecipientsTable.UPDATED_AT, now());
+        values.put(Database.RecipientsTable.IDEAS_COUNT, newIdeaCount);
+        writeableDatabase.update(TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
+        return new Recipient(recipient.getId(), recipient.getName(), newIdeaCount);
     }
 }
