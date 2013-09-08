@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
-import com.sgrailways.giftidea.GiftIdeaFormat;
+import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.giftidea.domain.MissingIdea;
 import org.apache.commons.lang3.StringUtils;
@@ -16,15 +16,15 @@ public class Ideas {
     private final SQLiteDatabase writeableDatabase;
     private final Database database;
     private final Recipients recipients;
-    private final GiftIdeaFormat giftIdeaFormat;
+    private final Clock clock;
     private final static String[] COLUMNS = new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA};
 
     @Inject
-    public Ideas(Database database, Recipients recipients, GiftIdeaFormat giftIdeaFormat) {
+    public Ideas(Database database, Recipients recipients, Clock clock) {
         this.writeableDatabase = database.getWritableDatabase();
         this.database = database;
         this.recipients = recipients;
-        this.giftIdeaFormat = giftIdeaFormat;
+        this.clock = clock;
     }
 
     public Idea findById(long id) {
@@ -74,7 +74,7 @@ public class Ideas {
     public void update(long id, String idea) {
         ContentValues ideaValues = new ContentValues();
         ideaValues.put(Database.IdeasTable.IDEA, StringUtils.normalizeSpace(idea));
-        ideaValues.put(Database.IdeasTable.UPDATED_AT, giftIdeaFormat.now());
+        ideaValues.put(Database.IdeasTable.UPDATED_AT, clock.now());
         try {
             writeableDatabase.beginTransaction();
             writeableDatabase.update(TABLE_NAME, ideaValues, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});

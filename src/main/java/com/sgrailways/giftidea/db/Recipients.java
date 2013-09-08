@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
-import com.sgrailways.giftidea.GiftIdeaFormat;
+import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
 
@@ -13,12 +13,12 @@ import static com.sgrailways.giftidea.db.Database.RecipientsTable.*;
 
 public class Recipients {
     private final static String[] COLUMNS = new String[]{_ID, NAME, IDEAS_COUNT};
-    private final GiftIdeaFormat giftIdeaFormat;
+    private final Clock clock;
     private final SQLiteDatabase writeableDatabase;
 
     @Inject
-    public Recipients(Database database, GiftIdeaFormat giftIdeaFormat) {
-        this.giftIdeaFormat = giftIdeaFormat;
+    public Recipients(Database database, Clock clock) {
+        this.clock = clock;
         this.writeableDatabase = database.getWritableDatabase();
     }
 
@@ -47,7 +47,7 @@ public class Recipients {
     }
 
     public Recipient createFromName(String name) {
-        String now = giftIdeaFormat.now();
+        String now = clock.now();
         ContentValues values = new ContentValues();
         values.put(Database.RecipientsTable.NAME, name);
         values.put(Database.RecipientsTable.IDEAS_COUNT, 1L);
@@ -67,7 +67,7 @@ public class Recipients {
 
     private Recipient changeIdeaCountFor(Recipient recipient, long newIdeaCount) {
         ContentValues values = new ContentValues();
-        values.put(Database.RecipientsTable.UPDATED_AT, giftIdeaFormat.now());
+        values.put(Database.RecipientsTable.UPDATED_AT, clock.now());
         values.put(Database.RecipientsTable.IDEAS_COUNT, newIdeaCount);
         writeableDatabase.update(TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
         return new Recipient(recipient.getId(), recipient.getName(), newIdeaCount);
