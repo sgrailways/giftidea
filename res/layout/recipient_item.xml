@@ -9,27 +9,29 @@
   <TextView
     android:id="@+id/name"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:lines="1"
     android:ellipsize="end"
+    android:layout_toLeftOf="@+id/ideas_count"
     android:textAppearance="?android:textAppearanceMedium"/>
 
   <TextView
     android:id="@+id/ideas_count"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:layout_toLeftOf="@+id/ideas_count_label"
     android:textColor="@android:color/secondary_text_light"
-    android:text="@string/zero"
-    android:layout_below="@+id/name"/>
+    android:text="@string/zero"/>
 
   <TextView
     android:id="@+id/ideas_count_label"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginLeft="4dp"
-    android:layout_toRightOf="@+id/ideas_count"
-    android:layout_alignBottom="@+id/ideas_count"
+    android:layout_alignParentRight="true"
+    android:layout_alignBaseline="@+id/ideas_count"
     android:textColor="@android:color/secondary_text_light"
     android:text="@string/ideas_label"/>
 </RelativeLayout>
