@@ -72,4 +72,9 @@ public class Recipients {
         writeableDatabase.update(TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
         return new Recipient(recipient.getId(), recipient.getName(), newIdeaCount);
     }
+
+    public Recipient decrementIdeaCountFor(long recipientId) {
+        Recipient recipient = findById(recipientId);
+        return decrementIdeaCountFor(recipient);
+    }
 }

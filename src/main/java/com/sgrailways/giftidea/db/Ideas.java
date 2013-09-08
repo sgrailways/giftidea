@@ -23,7 +23,12 @@ public class Ideas {
     private final Recipients recipients;
     private final Clock clock;
     private final HashTagLocator hashTagLocator;
-    private final static String[] COLUMNS = new String[]{Database.IdeasTable._ID, Database.IdeasTable.IDEA, Database.IdeasTable.IS_DONE};
+    private final static String[] COLUMNS = new String[]{
+            Database.IdeasTable._ID,
+            Database.IdeasTable.IDEA,
+            Database.IdeasTable.IS_DONE,
+            Database.IdeasTable.RECIPIENT_ID
+    };
 
     @Inject
     public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
@@ -38,7 +43,7 @@ public class Ideas {
         if(!cursor.moveToFirst()) {
             return new MissingIdea();
         }
-        Idea idea = new Idea(cursor.getLong(0), cursor.getString(1));
+        Idea idea = new Idea(cursor.getLong(0), cursor.getString(1), Boolean.parseBoolean(cursor.getString(2)), cursor.getLong(3));
         cursor.close();
         return idea;
     }
@@ -50,36 +55,24 @@ public class Ideas {
 
     public Remaining delete(long id) {
         Remaining ideasRemaining;
-        try {
-            writeableDatabase.beginTransaction();
-            Cursor cursor = writeableDatabase.query(TABLE_NAME, new String[]{Database.IdeasTable.RECIPIENT_ID}, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
-            cursor.moveToFirst();
-            long recipientId = cursor.getLong(0);
-            cursor.close();
+            Idea idea = findById(id);
+            if(!idea.isDone()) {
+                recipients.decrementIdeaCountFor(idea.getRecipientId());
+            }
             writeableDatabase.delete(TABLE_NAME, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
-            //TODO: remove this for api-10 compatibility
-            long ideasForRecipient = DatabaseUtils.queryNumEntries(writeableDatabase, TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
-            long activeIdeasForRecipient = DatabaseUtils.queryNumEntries(writeableDatabase, TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=? AND " + Database.IdeasTable.IS_DONE + "=?", new String[]{String.valueOf(recipientId), String.valueOf(false)});
+            long ideasForRecipient = DatabaseUtils.longForQuery(writeableDatabase, String.format("SELECT COUNT(*) FROM %s WHERE %s=?", TABLE_NAME, Database.IdeasTable.RECIPIENT_ID), new String[]{String.valueOf(idea.getRecipientId())});
             if (ideasForRecipient == 0) {
-                writeableDatabase.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
+                writeableDatabase.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(idea.getRecipientId())});
                 ideasRemaining = Remaining.NO;
-            } else if(activeIdeasForRecipient > 0) {
-                recipients.decrementIdeaCountFor(recipients.findById(recipientId));
-                ideasRemaining = Remaining.YES;
             } else {
                 ideasRemaining = Remaining.YES;
             }
-            writeableDatabase.setTransactionSuccessful();
             return ideasRemaining;
-        } finally {
-            writeableDatabase.endTransaction();
-        }
     }
 
     public Remaining forRecipient(String recipientName) {
         long recipientId = recipients.findByName(recipientName).getId();
-        //TODO: remove this for api-10 compatibility
-        long ideasCount = DatabaseUtils.queryNumEntries(writeableDatabase, TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
+        long ideasCount = DatabaseUtils.longForQuery(writeableDatabase, String.format("SELECT COUNT(*) FROM %s WHERE %s=?", TABLE_NAME, Database.IdeasTable.RECIPIENT_ID), new String[]{String.valueOf(recipientId)});
         return ideasCount == 0 ? Remaining.NO : Remaining.YES;
     }
 
