@@ -86,13 +86,17 @@ public class NewIdeaFragment extends RoboFragment {
                     try {
                         wdb.beginTransaction();
                         for (String hashTag : hashTags) {
-                            Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID}, Database.RecipientsTable.NAME + "=?", new String[]{hashTag}, null, null, null, "1");
+                            Cursor query = wdb.query(Database.RecipientsTable.TABLE_NAME, new String[]{Database.RecipientsTable._ID, Database.RecipientsTable.IDEAS_COUNT}, Database.RecipientsTable.NAME + "=?", new String[]{hashTag}, null, null, null, "1");
                             long recipientId;
+                            ContentValues recipientValues = new ContentValues();
                             if (query.moveToFirst()) {
                                 recipientId = query.getLong(0);
+                                long recipientIdeasCount = query.getLong(1);
+                                recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, ++recipientIdeasCount);
+                                wdb.update(Database.RecipientsTable.TABLE_NAME, recipientValues, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(recipientId)});
                             } else {
-                                ContentValues recipientValues = new ContentValues();
                                 recipientValues.put(Database.RecipientsTable.NAME, hashTag);
+                                recipientValues.put(Database.RecipientsTable.IDEAS_COUNT, 1);
                                 recipientValues.put(Database.RecipientsTable.CREATED_AT, now);
                                 recipientValues.put(Database.RecipientsTable.UPDATED_AT, now);
                                 recipientId = wdb.insert(Database.RecipientsTable.TABLE_NAME, null, recipientValues);
