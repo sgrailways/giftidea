@@ -1,18 +1,22 @@
 package com.sgrailways.giftidea.db;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.GiftIdeaFormat;
+import org.apache.commons.lang3.StringUtils;
 
 public class Ideas {
+    private final SQLiteDatabase writeableDatabase;
     private final Database database;
     private final Recipients recipients;
     private final GiftIdeaFormat giftIdeaFormat;
 
     @Inject
     public Ideas(Database database, Recipients recipients, GiftIdeaFormat giftIdeaFormat) {
+        this.writeableDatabase = database.getWritableDatabase();
         this.database = database;
         this.recipients = recipients;
         this.giftIdeaFormat = giftIdeaFormat;
@@ -50,6 +54,19 @@ public class Ideas {
         //TODO: remove this for api-10 compatibility
         long ideasCount = DatabaseUtils.queryNumEntries(wdb, Database.IdeasTable.TABLE_NAME, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{String.valueOf(recipientId)});
         return ideasCount == 0 ? Remaining.NO : Remaining.YES;
+    }
+
+    public void update(long id, String idea) {
+        ContentValues ideaValues = new ContentValues();
+        ideaValues.put(Database.IdeasTable.IDEA, StringUtils.normalizeSpace(idea));
+        ideaValues.put(Database.IdeasTable.UPDATED_AT, giftIdeaFormat.now());
+        try {
+            writeableDatabase.beginTransaction();
+            writeableDatabase.update(Database.IdeasTable.TABLE_NAME, ideaValues, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
+            writeableDatabase.setTransactionSuccessful();
+        } finally {
+            writeableDatabase.endTransaction();
+        }
     }
 
     public enum Remaining {

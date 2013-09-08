@@ -1,6 +1,5 @@
 package com.sgrailways.giftidea;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -69,18 +66,7 @@ public class EditIdeaFragment extends RoboFragment {
                 if (!hasAppropriateLength) {
                     idea.setError(noIdeaMessage);
                 } else {
-                    String now = DateTime.now().toString(ISODateTimeFormat.basicDateTime());
-                    ContentValues ideaValues = new ContentValues();
-                    ideaValues.put(Database.IdeasTable.IDEA, StringUtils.normalizeSpace(idea.getText().toString()));
-                    ideaValues.put(Database.IdeasTable.UPDATED_AT, now);
-                    SQLiteDatabase wdb = database.getWritableDatabase();
-                    try {
-                        wdb.beginTransaction();
-                        wdb.update(Database.IdeasTable.TABLE_NAME, ideaValues, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(ideaId)});
-                        wdb.setTransactionSuccessful();
-                    } finally {
-                        wdb.endTransaction();
-                    }
+                    ideas.update(ideaId, idea.getText().toString());
                     getActivity().finish();
                 }
                 return true;
