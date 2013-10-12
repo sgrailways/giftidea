@@ -10,6 +10,7 @@ import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
 import org.apache.commons.lang3.StringUtils;
 import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
@@ -19,8 +20,9 @@ public class EditIdeaFragment extends RoboFragment {
     @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
     @InjectResource(R.string.edit_idea_title) String editIdeaTitle;
+    @InjectExtra("ideaId") Long ideaId;
+    @InjectExtra("recipient") String recipientName;
     boolean isValid = false;
-    private long ideaId;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_edit_idea, container, false);
@@ -29,8 +31,6 @@ public class EditIdeaFragment extends RoboFragment {
     @Override public void onResume() {
         super.onResume();
         getActivity().setTitle(editIdeaTitle);
-        Bundle extras = getActivity().getIntent().getExtras();
-        ideaId = extras.getLong("ideaId", -1L);
         Idea idea = ideas.findById(ideaId);
         ideaEditText.setText(idea.getText());
         isValid = validateIdeaEditText();
@@ -39,7 +39,7 @@ public class EditIdeaFragment extends RoboFragment {
                 isValid = validateIdeaEditText();
             }
         });
-        recipient.setText(extras.getString("recipient", "#error"));
+        recipient.setText(recipientName);
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

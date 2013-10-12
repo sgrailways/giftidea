@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import roboguice.fragment.RoboListFragment;
+import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
@@ -22,10 +23,9 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Ideas ideas;
     @InjectResource(R.string.app_name) String appName;
-    private String recipientName;
+    @InjectExtra("recipient") String recipientName;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.recipientName = getActivity().getIntent().getExtras().getString("recipient");
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 this.getActivity(),
                 R.layout.idea_item,
