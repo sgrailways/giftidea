@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.listeners.DialogDismissListener;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -22,6 +23,7 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Ideas ideas;
+    @Inject DialogDismissListener dialogDismissListener;
     @InjectResource(R.string.app_name) String appName;
     @InjectExtra("recipient") String recipientName;
 
@@ -48,11 +50,7 @@ public class RecipientIdeasList extends RoboListFragment {
                     idea.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(RecipientIdeasList.this.getActivity())
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    })
+                                    .setNegativeButton(R.string.cancel, dialogDismissListener)
                                     .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             ideas.delete(id);
