@@ -1,10 +1,10 @@
 package com.sgrailways.giftidea.listeners;
 
 import android.content.DialogInterface;
-import org.junit.Before;
+import com.sgrailways.rules.MockitoRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.core.Is.isA;
 import static org.junit.Assert.assertThat;
@@ -16,9 +16,7 @@ public class DialogDismissListenerTest {
 
     @Mock DialogInterface dialog;
 
-    @Before public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    @Rule public MockitoRule rule = new MockitoRule(this);
 
     @Test public void shouldBeAnInstanceOfDialogInterfaceOnClickListener() {
         assertThat(new DialogDismissListener(), isA(DialogInterface.OnClickListener.class));
