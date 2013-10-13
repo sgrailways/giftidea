@@ -13,6 +13,7 @@ import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
+import com.sgrailways.giftidea.events.GotItEvent;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.apache.commons.lang3.StringUtils;
@@ -141,5 +142,9 @@ public class Ideas {
 
     @Subscribe public void answerDeleteIdea(DeleteIdeaEvent event) {
         delete(event.getId());
+    }
+
+    @Subscribe public void answerGotIt(GotItEvent event) {
+        gotIt(event.getId(), event.getRecipientName());
     }
 }

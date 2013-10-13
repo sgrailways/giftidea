@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
+import com.sgrailways.giftidea.events.GotItEvent;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
 import com.squareup.otto.Bus;
@@ -70,7 +71,7 @@ public class RecipientIdeasList extends RoboListFragment {
                 } else {
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            ideas.gotIt(id, recipientName);
+                            bus.post(new GotItEvent(id, recipientName));
                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
                             bus.post(new RefreshIdeasListEvent());
                         }
