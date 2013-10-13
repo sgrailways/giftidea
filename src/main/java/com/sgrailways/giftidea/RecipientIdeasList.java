@@ -1,8 +1,6 @@
 package com.sgrailways.giftidea;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -13,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
-import com.sgrailways.giftidea.events.DeleteIdeaEvent;
-import com.sgrailways.giftidea.events.GotItEvent;
-import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
 import com.squareup.otto.Bus;
 import roboguice.fragment.RoboListFragment;
@@ -29,6 +24,7 @@ public class RecipientIdeasList extends RoboListFragment {
     @Inject Ideas ideas;
     @Inject Toaster toaster;
     @Inject DialogDismissListener dialogDismissListener;
+    @Inject ListenerFactory listenerFactory;
     @InjectResource(R.string.app_name) String appName;
     @InjectResource(R.string.got_it_message) String gotItMessage;
     @InjectResource(R.string.finished_idea_deleted_message) String deletedMessage;
@@ -58,34 +54,15 @@ public class RecipientIdeasList extends RoboListFragment {
                         public void onClick(View v) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(RecipientIdeasList.this.getActivity())
                                     .setNegativeButton(R.string.cancel, dialogDismissListener)
-                                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            bus.post(new DeleteIdeaEvent(id));
-                                            toaster.show(deletedMessage);
-                                            bus.post(new RefreshIdeasListEvent());
-                                        }
-                                    })
+                                    .setPositiveButton(R.string.delete, listenerFactory.deleteIdeaListener(id, deletedMessage))
                                     .setTitle(R.string.confirmation)
                                     .setMessage("Delete idea for " + recipientName + "?");
                             alert.create().show();
                         }
                     });
                 } else {
-                    gotIt.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            bus.post(new GotItEvent(id, recipientName));
-                            toaster.show(gotItMessage);
-                            bus.post(new RefreshIdeasListEvent());
-                        }
-                    });
-                    idea.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            Intent intent = new Intent(RecipientIdeasList.this.getActivity(), IdeaActivity.class);
-                            intent.putExtra("ideaId", id);
-                            intent.putExtra("recipient", recipientName);
-                            startActivity(intent);
-                        }
-                    });
+                    gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipientName, gotItMessage));
+                    idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipientName));
                 }
                 return true;
             }
