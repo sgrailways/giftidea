@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
-import com.sgrailways.giftidea.listeners.DialogDismissListener;
-import com.squareup.otto.Bus;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -19,10 +17,7 @@ import roboguice.inject.InjectResource;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends RoboListFragment {
-    @Inject Bus bus;
     @Inject Ideas ideas;
-    @Inject Toaster toaster;
-    @Inject DialogDismissListener dialogDismissListener;
     @Inject ListenerFactory listenerFactory;
     @InjectResource(R.string.app_name) String appName;
     @InjectResource(R.string.got_it_message) String gotItMessage;
