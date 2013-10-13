@@ -1,6 +1,5 @@
 package com.sgrailways.giftidea;
 
-import android.app.AlertDialog;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -50,16 +49,7 @@ public class RecipientIdeasList extends RoboListFragment {
                 if (Boolean.parseBoolean(cursor.getString(2))) {
                     gotIt.setVisibility(View.GONE);
                     idea.setPaintFlags(idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    idea.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(RecipientIdeasList.this.getActivity())
-                                    .setNegativeButton(R.string.cancel, dialogDismissListener)
-                                    .setPositiveButton(R.string.delete, listenerFactory.deleteIdeaListener(id, deletedMessage))
-                                    .setTitle(R.string.confirmation)
-                                    .setMessage("Delete idea for " + recipientName + "?");
-                            alert.create().show();
-                        }
-                    });
+                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipientName, deletedMessage));
                 } else {
                     gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipientName, gotItMessage));
                     idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipientName));
