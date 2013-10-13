@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
@@ -28,8 +27,11 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 public class RecipientIdeasList extends RoboListFragment {
     @Inject Bus bus;
     @Inject Ideas ideas;
+    @Inject Toaster toaster;
     @Inject DialogDismissListener dialogDismissListener;
     @InjectResource(R.string.app_name) String appName;
+    @InjectResource(R.string.got_it_message) String gotItMessage;
+    @InjectResource(R.string.finished_idea_deleted_message) String deletedMessage;
     @InjectExtra("recipient") String recipientName;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class RecipientIdeasList extends RoboListFragment {
                                     .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             bus.post(new DeleteIdeaEvent(id));
-                                            Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.finished_idea_deleted_message, Toast.LENGTH_SHORT).show();
+                                            toaster.show(deletedMessage);
                                             bus.post(new RefreshIdeasListEvent());
                                         }
                                     })
@@ -72,7 +74,7 @@ public class RecipientIdeasList extends RoboListFragment {
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             bus.post(new GotItEvent(id, recipientName));
-                            Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
+                            toaster.show(gotItMessage);
                             bus.post(new RefreshIdeasListEvent());
                         }
                     });
