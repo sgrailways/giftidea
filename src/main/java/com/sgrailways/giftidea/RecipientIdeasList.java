@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
 import com.squareup.otto.Bus;
@@ -56,7 +57,7 @@ public class RecipientIdeasList extends RoboListFragment {
                                     .setNegativeButton(R.string.cancel, dialogDismissListener)
                                     .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            ideas.delete(id);
+                                            bus.post(new DeleteIdeaEvent(id));
                                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.finished_idea_deleted_message, Toast.LENGTH_SHORT).show();
                                             bus.post(new RefreshIdeasListEvent());
                                         }

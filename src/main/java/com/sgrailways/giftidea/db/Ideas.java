@@ -5,12 +5,16 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.HashTagLocator;
 import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
+import com.sgrailways.giftidea.events.DeleteIdeaEvent;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
@@ -18,6 +22,7 @@ import java.util.LinkedHashSet;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IS_DONE;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
+@Singleton
 public class Ideas {
     private final SQLiteDatabase writeableDatabase;
     private final Recipients recipients;
@@ -31,11 +36,12 @@ public class Ideas {
     };
 
     @Inject
-    public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
+    public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator, Bus bus) {
         this.hashTagLocator = hashTagLocator;
         this.writeableDatabase = database.getWritableDatabase();
         this.recipients = recipients;
         this.clock = clock;
+        bus.register(this);
     }
 
     public Idea findById(long id) {
@@ -131,5 +137,9 @@ public class Ideas {
 
     public enum Remaining {
         YES, NO
+    }
+
+    @Subscribe public void answerDeleteIdea(DeleteIdeaEvent event) {
+        delete(event.getId());
     }
 }
