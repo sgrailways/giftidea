@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
+import com.squareup.otto.Bus;
 import roboguice.fragment.RoboListFragment;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -22,6 +24,7 @@ import roboguice.inject.InjectResource;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends RoboListFragment {
+    @Inject Bus bus;
     @Inject Ideas ideas;
     @Inject DialogDismissListener dialogDismissListener;
     @InjectResource(R.string.app_name) String appName;
@@ -55,7 +58,7 @@ public class RecipientIdeasList extends RoboListFragment {
                                         public void onClick(DialogInterface dialog, int which) {
                                             ideas.delete(id);
                                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.finished_idea_deleted_message, Toast.LENGTH_SHORT).show();
-                                            ((RecipientIdeasActivity) getActivity()).onResume();
+                                            bus.post(new RefreshIdeasListEvent());
                                         }
                                     })
                                     .setTitle(R.string.confirmation)
@@ -68,7 +71,7 @@ public class RecipientIdeasList extends RoboListFragment {
                         public void onClick(View v) {
                             ideas.gotIt(id, recipientName);
                             Toast.makeText(RecipientIdeasList.this.getActivity(), R.string.got_it_message, Toast.LENGTH_SHORT).show();
-                            ((RecipientIdeasActivity) getActivity()).onResume();
+                            bus.post(new RefreshIdeasListEvent());
                         }
                     });
                     idea.setOnClickListener(new View.OnClickListener() {
