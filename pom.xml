@@ -142,7 +142,7 @@
             <debuggable>true</debuggable>
           </manifest>
           <sdk>
-            <platform>16</platform>
+            <platform>18</platform>
           </sdk>
           <emulator>
             <avd>giftidea</avd>
