@@ -1,4 +1,6 @@
 target/
+.gradle/
+build/
 .idea/
 giftidea.iml
 .DS_Store
