@@ -12,12 +12,9 @@
   <string name="no_hash_tags_message">Must have at least 1 hashtag</string>
   <string name="no_idea_message">Must have an idea!</string>
   <string name="action_update">update</string>
-  <string name="editing_for_label">Editing GiftIdea for</string>
   <string name="no_recipients_message">This is where gift recipients will show up.\n\n\nNo ideas yet! Add one now :)</string>
-  <string name="recipients">Recipients</string>
   <string name="action_delete">Delete</string>
   <string name="gift_recipients_title">GiftIdea! Recipients</string>
-  <string name="ideas_for_title">GiftIdeas! For</string>
   <string name="new_idea_title">New GiftIdea!</string>
   <string name="edit_idea_title">Edit GiftIdea!</string>
   <string name="action_about">About</string>
