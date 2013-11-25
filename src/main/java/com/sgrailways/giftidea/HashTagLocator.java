@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +17,7 @@ public class HashTagLocator {
         LinkedHashSet<String> hashTags = new LinkedHashSet<String>();
         Matcher matcher = pattern.matcher(s);
         while(matcher.find()) {
-            hashTags.add(matcher.group().toLowerCase());
+            hashTags.add(matcher.group().toLowerCase(Locale.getDefault()));
         }
         return hashTags;
     }
