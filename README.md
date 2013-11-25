@@ -1,15 +1,8 @@
 GiftIdea!
 =========
 [![Build Status](http://build.sgrailways.com/buildStatus/icon?job=giftidea)](http://build.sgrailways.com/job/giftidea/)
+
 An Open-Source Android Application for Gift Ideas
-
-
-Goals
------
-* Release a high-quality, simple, and useful Android application
-* Take a fairly normal Android app and refactor it to testability
-* Blog about learnings at http://dev.sghill.net
-
 
 Availability
 ------------
@@ -18,8 +11,8 @@ Availability
 
 Releases
 --------
-* 1.0.0: September 1, 2013
-* 1.1.0: September 8, 2013
+* [1.0.0][1.0]: September 1, 2013
+* [1.1.0][1.1]: September 8, 2013
 
 
 License
@@ -27,4 +20,6 @@ License
 MIT
 
 [play]: https://play.google.com/store/apps/details?id=com.sgrailways.giftidea
+[1.0]: http://sghill.blogspot.com/2013/09/giftidea-100.html
+[1.1]: http://sghill.blogspot.com/2013/09/giftidea-110.html
 
