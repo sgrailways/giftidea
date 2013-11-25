@@ -1,5 +1,6 @@
 GiftIdea!
 =========
+[![Build Status](http://build.sgrailways.com/buildStatus/icon?job=giftidea)](http://build.sgrailways.com/job/giftidea/)
 An Open-Source Android Application for Gift Ideas
 
 
