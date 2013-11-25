@@ -2,3 +2,5 @@ target/
 .idea/
 giftidea.iml
 .DS_Store
+*.swp
+
