@@ -17,9 +17,10 @@ Releases
 
 License
 -------
-MIT
+See [LICENSE][license]
 
 [play]: https://play.google.com/store/apps/details?id=com.sgrailways.giftidea
 [1.0]: http://sghill.blogspot.com/2013/09/giftidea-100.html
 [1.1]: http://sghill.blogspot.com/2013/09/giftidea-110.html
+[license]: https://github.com/sgrailways/giftidea/blob/master/LICENSE
 
