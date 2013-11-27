@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="twitter"
+        android:title="@string/twitter_label"
+        android:summary="@string/twitter" />
+    <Preference
+        android:key="code"
+        android:title="@string/code_label"
+        android:summary="@string/code"/>
+    <Preference
+        android:key="license"
+        android:title="@string/license_label"
+        android:summary="@string/bsd_license"/>
+</PreferenceScreen>
