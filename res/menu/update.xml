@@ -3,13 +3,15 @@
   <item
     android:id="@+id/action_update"
     android:orderInCategory="100"
-    android:showAsAction="ifRoom"
+    android:icon="@drawable/ic_cab_done_holo_dark"
+    android:showAsAction="ifRoom|withText"
     android:title="@string/action_update"/>
 
   <item
     android:id="@+id/action_delete"
     android:orderInCategory="200"
-    android:showAsAction="never"
+    android:icon="@android:drawable/ic_menu_delete"
+    android:showAsAction="ifRoom|withText"
     android:title="@string/action_delete"/>
 
 </menu>

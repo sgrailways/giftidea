@@ -3,7 +3,8 @@
   <item
     android:id="@+id/action_create"
     android:orderInCategory="100"
-    android:showAsAction="always"
+    android:icon="@drawable/ic_cab_done_holo_dark"
+    android:showAsAction="ifRoom|withText"
     android:title="@string/action_create"/>
 
 </menu>
