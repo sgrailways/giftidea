@@ -29,6 +29,6 @@ public class HashTagLocator {
             hashTagFree = hashTagFree.replaceAll(matcher.group(), "");
         }
         hashTagFree = CharMatcher.is('#').removeFrom(hashTagFree);
-        return CharMatcher.WHITESPACE.collapseFrom(hashTagFree, ' ');
+        return CharMatcher.WHITESPACE.collapseFrom(hashTagFree, ' ').trim();
     }
 }
