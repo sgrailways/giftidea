@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -16,6 +17,7 @@ import java.util.LinkedHashSet;
 
 public class NewIdeaFragment extends RoboFragment {
     @Inject Ideas ideas;
+    @Inject ActionFactory actionFactory;
     @Inject HashTagLocator hashTagLocator;
     @InjectView(R.id.idea) EditText idea;
     @InjectView(R.id.recipients_view) TextView recipients;
@@ -67,7 +69,7 @@ public class NewIdeaFragment extends RoboFragment {
                 }
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return actionFactory.create(item, getActivity()).invoke();
         }
     }
 }

@@ -20,13 +20,15 @@ public class ListenerFactory {
     private final Toaster toaster;
     private final Context context;
     private final DialogDismissListener dialogDismissListener;
+    private final Session session;
 
     @Inject
-    public ListenerFactory(Bus bus, Toaster toaster, Context context, DialogDismissListener dialogDismissListener) {
+    public ListenerFactory(Bus bus, Toaster toaster, Context context, DialogDismissListener dialogDismissListener, Session session) {
         this.bus = bus;
         this.toaster = toaster;
         this.context = context;
         this.dialogDismissListener = dialogDismissListener;
+        this.session = session;
     }
 
     public DialogInterface.OnClickListener deleteIdeaListener(final Long id, final String message) {
@@ -54,7 +56,7 @@ public class ListenerFactory {
             public void onClick(View v) {
                 Intent intent = new Intent(context, IdeaActivity.class);
                 intent.putExtra("ideaId", id);
-                intent.putExtra("recipient", recipientName);
+                session.setRecipientName(recipientName);
                 context.startActivity(intent);
             }
         };

@@ -10,6 +10,7 @@ public class IdeaActivity extends RoboFragmentActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_new_idea);
         Fragment fragment;
         if(ideaId != null) {

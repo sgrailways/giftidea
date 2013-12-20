@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
 
+import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -23,12 +24,13 @@ import roboguice.inject.InjectView;
 
 public class EditIdeaFragment extends RoboFragment {
     @Inject Ideas ideas;
+    @Inject Session session;
+    @Inject ActionFactory actionFactory;
     @InjectView(R.id.idea) EditText ideaEditText;
     @InjectView(R.id.recipient) TextView recipient;
     @InjectResource(R.string.no_idea_message) String noIdeaMessage;
     @InjectResource(R.string.edit_idea_title) String editIdeaTitle;
     @InjectExtra("ideaId") Long ideaId;
-    @InjectExtra("recipient") String recipientName;
     boolean isValid = false;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class EditIdeaFragment extends RoboFragment {
                 isValid = validateIdeaEditText();
             }
         });
-        recipient.setText(recipientName);
+        recipient.setText(session.getRecipientName());
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -69,7 +71,7 @@ public class EditIdeaFragment extends RoboFragment {
                 getActivity().finish();
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return actionFactory.create(item, getActivity()).invoke();
         }
     }
 

@@ -17,6 +17,7 @@ import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
 
 public class RecipientsList extends RoboListFragment {
     @Inject Recipients recipients;
+    @Inject Session session;
     @InjectResource(R.string.no_recipients_message) String noRecipientsMessage;
     @InjectResource(R.string.idea_label) String singularIdeaLabel;
 
@@ -46,7 +47,7 @@ public class RecipientsList extends RoboListFragment {
                 rootView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent intent = new Intent(RecipientsList.this.getActivity(), RecipientIdeasActivity.class);
-                        intent.putExtra("recipient", ((TextView) v.findViewById(R.id.name)).getText().toString());
+                        session.setRecipientName(((TextView) v.findViewById(R.id.name)).getText().toString());
                         startActivity(intent);
                     }
                 });

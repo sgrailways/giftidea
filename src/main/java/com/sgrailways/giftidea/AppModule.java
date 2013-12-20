@@ -8,6 +8,7 @@ import com.squareup.otto.Bus;
 public class AppModule extends AbstractModule {
     @Override protected void configure() {
         bind(Bus.class).toInstance(new Bus());
+        bind(Session.class).toInstance(new Session());
         bind(ActionFactory.class).to(StdActionFactory.class);
     }
 }
