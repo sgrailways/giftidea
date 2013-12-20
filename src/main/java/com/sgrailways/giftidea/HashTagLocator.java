@@ -1,7 +1,7 @@
 package com.sgrailways.giftidea;
 
+import com.google.common.base.CharMatcher;
 import com.google.inject.Singleton;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -26,9 +26,9 @@ public class HashTagLocator {
         Matcher matcher = pattern.matcher(s);
         String hashTagFree = s;
         while (matcher.find()) {
-            hashTagFree = StringUtils.remove(hashTagFree, matcher.group());
+            hashTagFree = hashTagFree.replaceAll(matcher.group(), "");
         }
-        hashTagFree = StringUtils.remove(hashTagFree, "#");
-        return StringUtils.normalizeSpace(hashTagFree);
+        hashTagFree = CharMatcher.is('#').removeFrom(hashTagFree);
+        return CharMatcher.WHITESPACE.collapseFrom(hashTagFree, ' ');
     }
 }

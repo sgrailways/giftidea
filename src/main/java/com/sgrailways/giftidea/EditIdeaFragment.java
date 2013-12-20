@@ -2,13 +2,20 @@ package com.sgrailways.giftidea;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
-import org.apache.commons.lang3.StringUtils;
+
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -67,6 +74,6 @@ public class EditIdeaFragment extends RoboFragment {
     }
 
     private boolean validateIdeaEditText() {
-        return StringUtils.isNotEmpty(ideaEditText.getText().toString());
+        return !Strings.nullToEmpty(ideaEditText.getText().toString()).isEmpty();
     }
 }

@@ -1,8 +1,6 @@
 package com.sgrailways.giftidea.domain;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.google.common.base.Objects;
 
 public class Idea {
     private final long id;
@@ -34,14 +32,21 @@ public class Idea {
     }
 
     @Override public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.toStringHelper(this)
+                .add("id", id)
+                .add("text", text)
+                .add("done", done)
+                .toString();
     }
 
     @Override public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Idea that = (Idea) o;
+        return Objects.equal(this, that);
+    }
+
+    @Override public int hashCode() {
+        return Objects.hashCode(this);
     }
 }

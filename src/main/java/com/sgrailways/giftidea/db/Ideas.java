@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.google.common.base.CharMatcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.sgrailways.giftidea.Clock;
@@ -16,7 +18,6 @@ import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.GotItEvent;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 
@@ -85,7 +86,7 @@ public class Ideas {
 
     public void update(long id, String idea) {
         ContentValues ideaValues = new ContentValues();
-        ideaValues.put(Database.IdeasTable.IDEA, StringUtils.normalizeSpace(idea));
+        ideaValues.put(Database.IdeasTable.IDEA, CharMatcher.WHITESPACE.collapseFrom(idea, ' '));
         ideaValues.put(Database.IdeasTable.UPDATED_AT, clock.now());
         try {
             writeableDatabase.beginTransaction();
