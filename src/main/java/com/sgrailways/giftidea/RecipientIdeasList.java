@@ -44,7 +44,7 @@ public class RecipientIdeasList extends RoboListFragment {
                 if (Boolean.parseBoolean(cursor.getString(2))) {
                     gotIt.setVisibility(View.GONE);
                     idea.setPaintFlags(idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipientName, deletedMessage));
+                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipientName, deletedMessage, getActivity()));
                 } else {
                     gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipientName, gotItMessage));
                     idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipientName));

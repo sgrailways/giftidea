@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,10 +60,10 @@ public class ListenerFactory {
         };
     }
 
-    public View.OnClickListener confirmDeleteListener(final Long id, final String recipientName, final String deletedMessage) {
+    public View.OnClickListener confirmDeleteListener(final Long id, final String recipientName, final String deletedMessage, final Activity activity) {
         return new View.OnClickListener() {
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity)
                         .setNegativeButton(R.string.cancel, dialogDismissListener)
                         .setPositiveButton(R.string.delete, deleteIdeaListener(id, deletedMessage))
                         .setTitle(R.string.confirmation)
