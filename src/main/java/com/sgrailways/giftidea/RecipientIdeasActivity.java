@@ -6,17 +6,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
+import com.sgrailways.statham.ActionFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import roboguice.activity.RoboFragmentActivity;
 
 public class RecipientIdeasActivity extends RoboFragmentActivity {
+    @Inject ActionFactory actionFactory;
     @Inject Bus bus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction().add(R.id.recipients, new RecipientIdeasList()).commit();
         bus.register(this);
     }
@@ -37,7 +40,7 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return actionFactory.create(item, this).invoke();
         }
     }
 
