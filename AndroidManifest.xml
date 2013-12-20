@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="34" android:versionName="LOCAL" package="com.sgrailways.giftidea">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="35" android:versionName="5224cca" package="com.sgrailways.giftidea">
 
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="19"/>
 
