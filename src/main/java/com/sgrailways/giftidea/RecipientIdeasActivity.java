@@ -4,16 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.events.DeleteIdeaEvent;
+import com.sgrailways.giftidea.events.GotItEvent;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.statham.ActionFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import roboguice.activity.RoboFragmentActivity;
 
 public class RecipientIdeasActivity extends RoboFragmentActivity {
     @Inject ActionFactory actionFactory;
     @Inject Bus bus;
+    @Inject Ideas ideas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,14 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
 
     @Subscribe public void answerRefreshIdeasList(RefreshIdeasListEvent event) {
         onResume();
+    }
+
+    @Subscribe public void answerDeleteIdea(DeleteIdeaEvent event) {
+        ideas.delete(event.getId());
+    }
+
+    @Subscribe public void answerGotIt(GotItEvent event) {
+        ideas.gotIt(event.getId(), event.getRecipientName());
     }
 }
 

@@ -14,10 +14,6 @@ import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
-import com.sgrailways.giftidea.events.DeleteIdeaEvent;
-import com.sgrailways.giftidea.events.GotItEvent;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import java.util.LinkedHashSet;
 
@@ -38,12 +34,11 @@ public class Ideas {
     };
 
     @Inject
-    public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator, Bus bus) {
+    public Ideas(Database database, Recipients recipients, Clock clock, HashTagLocator hashTagLocator) {
         this.hashTagLocator = hashTagLocator;
         this.writeableDatabase = database.getWritableDatabase();
         this.recipients = recipients;
         this.clock = clock;
-        bus.register(this);
     }
 
     public Idea findById(long id) {
@@ -139,13 +134,5 @@ public class Ideas {
 
     public enum Remaining {
         YES, NO
-    }
-
-    @Subscribe public void answerDeleteIdea(DeleteIdeaEvent event) {
-        delete(event.getId());
-    }
-
-    @Subscribe public void answerGotIt(GotItEvent event) {
-        gotIt(event.getId(), event.getRecipientName());
     }
 }
