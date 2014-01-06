@@ -44,6 +44,11 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
         }
     }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
+    }
+
     @Override protected void onResume() {
         getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientIdeasList()).commit();
         super.onResume();
