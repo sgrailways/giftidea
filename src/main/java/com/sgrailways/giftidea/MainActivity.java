@@ -12,7 +12,7 @@ public class MainActivity extends RoboFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction().add(R.id.recipients, new RecipientsList()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
     }
 
     @Override

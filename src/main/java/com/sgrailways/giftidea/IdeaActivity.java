@@ -19,6 +19,6 @@ public class IdeaActivity extends RoboFragmentActivity {
             fragment = new NewIdeaFragment();
         }
         fragment.setHasOptionsMenu(true);
-        getSupportFragmentManager().beginTransaction().add(R.id.new_idea, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.new_idea, fragment).commit();
     }
 }

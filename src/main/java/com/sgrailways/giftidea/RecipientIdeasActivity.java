@@ -26,7 +26,7 @@ public class RecipientIdeasActivity extends RoboFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportFragmentManager().beginTransaction().add(R.id.recipients, new RecipientIdeasList()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientIdeasList()).commit();
         bus.register(this);
     }
 
