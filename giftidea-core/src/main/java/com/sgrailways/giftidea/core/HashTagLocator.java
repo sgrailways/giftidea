@@ -1,14 +1,12 @@
-package com.sgrailways.giftidea;
+package com.sgrailways.giftidea.core;
 
 import com.google.common.base.CharMatcher;
-import com.google.inject.Singleton;
 
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Singleton
 public class HashTagLocator {
 
     private final Pattern pattern = Pattern.compile("(#\\w+)");

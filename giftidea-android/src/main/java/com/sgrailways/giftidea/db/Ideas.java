@@ -9,7 +9,7 @@ import com.google.common.base.CharMatcher;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.sgrailways.giftidea.Clock;
-import com.sgrailways.giftidea.HashTagLocator;
+import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;

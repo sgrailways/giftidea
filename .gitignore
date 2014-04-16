@@ -2,7 +2,7 @@ target/
 .gradle/
 build/
 .idea/
-giftidea.iml
+*.iml
 .DS_Store
 *.swp
 *~

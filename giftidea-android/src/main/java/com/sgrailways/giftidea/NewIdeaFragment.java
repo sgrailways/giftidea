@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
+import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;

@@ -1,6 +1,5 @@
-package com.sgrailways;
+package com.sgrailways.giftidea.core;
 
-import com.sgrailways.giftidea.HashTagLocator;
 import org.junit.Before;
 import org.junit.Test;
 
