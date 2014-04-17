@@ -3,17 +3,14 @@ package com.sgrailways.giftidea;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import roboguice.activity.RoboFragmentActivity;
-import roboguice.inject.InjectExtra;
 
 public class IdeaActivity extends RoboFragmentActivity {
-    @InjectExtra(value = "ideaId", optional = true) Long ideaId;
-
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_new_idea);
         Fragment fragment;
-        if(ideaId != null) {
+        if(getIntent().getExtras() != null && getIntent().getExtras().containsKey("ideaId")) {
             fragment = new EditIdeaFragment();
         } else {
             fragment = new NewIdeaFragment();

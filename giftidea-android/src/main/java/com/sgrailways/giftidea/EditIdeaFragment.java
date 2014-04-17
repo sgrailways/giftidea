@@ -18,7 +18,6 @@ import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectExtra;
 
 public class EditIdeaFragment extends RoboFragment {
     @Inject Ideas ideas;
@@ -26,7 +25,7 @@ public class EditIdeaFragment extends RoboFragment {
     @Inject ActionFactory actionFactory;
     @InjectView(R.id.idea) EditText ideaEditText;
     @InjectView(R.id.recipient) TextView recipient;
-    @InjectExtra("ideaId") Long ideaId;
+    Long ideaId;
     boolean isValid = false;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +42,8 @@ public class EditIdeaFragment extends RoboFragment {
     @Override public void onResume() {
         super.onResume();
         getActivity().setTitle(getString(R.string.edit_idea_title));
+        Bundle extras = getActivity().getIntent().getExtras();
+        ideaId = extras.getLong("ideaId", -1L);
         Idea idea = ideas.findById(ideaId);
         ideaEditText.setText(idea.getText());
         isValid = validateIdeaEditText();
