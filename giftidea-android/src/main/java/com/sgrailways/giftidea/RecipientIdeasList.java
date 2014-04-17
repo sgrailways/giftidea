@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import roboguice.fragment.RoboListFragment;
-import roboguice.inject.InjectResource;
 
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
@@ -19,9 +18,6 @@ public class RecipientIdeasList extends RoboListFragment {
     @Inject Ideas ideas;
     @Inject ListenerFactory listenerFactory;
     @Inject Session session;
-    @InjectResource(R.string.app_name) String appName;
-    @InjectResource(R.string.got_it_message) String gotItMessage;
-    @InjectResource(R.string.finished_idea_deleted_message) String deletedMessage;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
@@ -44,9 +40,9 @@ public class RecipientIdeasList extends RoboListFragment {
                 if (Boolean.parseBoolean(cursor.getString(2))) {
                     gotIt.setVisibility(View.GONE);
                     idea.setPaintFlags(idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipientName, deletedMessage, getActivity()));
+                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipientName, getString(R.string.finished_idea_deleted_message), getActivity()));
                 } else {
-                    gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipientName, gotItMessage));
+                    gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipientName, getString(R.string.got_it_message)));
                     idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipientName));
                 }
                 return true;
@@ -61,7 +57,7 @@ public class RecipientIdeasList extends RoboListFragment {
         String recipientName = session.getRecipientName();
         Ideas.Remaining remaining = ideas.forRecipient(recipientName);
         if (remaining == Ideas.Remaining.YES) {
-            getActivity().setTitle(recipientName + " " + appName);
+            getActivity().setTitle(recipientName + " " + getString(R.string.app_name));
         } else if (remaining == Ideas.Remaining.NO) {
             getActivity().finish();
         }

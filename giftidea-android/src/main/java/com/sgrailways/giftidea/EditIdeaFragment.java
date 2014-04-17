@@ -10,16 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
-
 import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 public class EditIdeaFragment extends RoboFragment {
@@ -28,8 +25,6 @@ public class EditIdeaFragment extends RoboFragment {
     @Inject ActionFactory actionFactory;
     @InjectView(R.id.idea) EditText ideaEditText;
     @InjectView(R.id.recipient) TextView recipient;
-    @InjectResource(R.string.no_idea_message) String noIdeaMessage;
-    @InjectResource(R.string.edit_idea_title) String editIdeaTitle;
     @InjectExtra("ideaId") Long ideaId;
     boolean isValid = false;
 
@@ -39,7 +34,7 @@ public class EditIdeaFragment extends RoboFragment {
 
     @Override public void onResume() {
         super.onResume();
-        getActivity().setTitle(editIdeaTitle);
+        getActivity().setTitle(getString(R.string.edit_idea_title));
         Idea idea = ideas.findById(ideaId);
         ideaEditText.setText(idea.getText());
         isValid = validateIdeaEditText();
@@ -60,7 +55,7 @@ public class EditIdeaFragment extends RoboFragment {
         switch (item.getItemId()) {
             case R.id.action_update:
                 if (!isValid) {
-                    ideaEditText.setError(noIdeaMessage);
+                    ideaEditText.setError(getString(R.string.no_idea_message));
                 } else {
                     ideas.update(ideaId, ideaEditText.getText().toString());
                     getActivity().finish();
