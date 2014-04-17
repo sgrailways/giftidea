@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
@@ -17,7 +19,6 @@ import com.sgrailways.giftidea.domain.Idea;
 import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
 
 public class EditIdeaFragment extends RoboFragment {
     @Inject Ideas ideas;
@@ -29,7 +30,14 @@ public class EditIdeaFragment extends RoboFragment {
     boolean isValid = false;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_edit_idea, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_idea, container, false);
+        ButterKnife.inject(this, view);
+        return view;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
     @Override public void onResume() {

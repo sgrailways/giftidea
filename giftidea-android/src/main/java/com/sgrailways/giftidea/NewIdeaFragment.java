@@ -10,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.statham.ActionFactory;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 import java.util.LinkedHashSet;
 
@@ -33,7 +34,14 @@ public class NewIdeaFragment extends RoboFragment {
     boolean hasAppropriateLength = false;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_idea, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_idea, container, false);
+        ButterKnife.inject(this, view);
+        return view;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
     @Override public void onResume() {
