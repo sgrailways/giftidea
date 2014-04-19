@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.sgrailways.giftidea.wiring.ForApplication;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class Database extends SQLiteOpenHelper {
@@ -14,7 +16,7 @@ public class Database extends SQLiteOpenHelper {
     private final static int VERSION = 2;
 
     @Inject
-    public Database(Context context) {
+    public Database(@ForApplication Context context) {
         super(context, NAME, null, VERSION);
     }
 

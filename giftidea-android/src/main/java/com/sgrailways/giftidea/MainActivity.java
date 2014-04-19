@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import roboguice.activity.RoboFragmentActivity;
+import com.sgrailways.giftidea.wiring.BaseActivity;
 
-public class MainActivity extends RoboFragmentActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MainActivity extends RoboFragmentActivity {
     }
 
     @Override protected void onResume() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
         super.onResume();
     }
 }

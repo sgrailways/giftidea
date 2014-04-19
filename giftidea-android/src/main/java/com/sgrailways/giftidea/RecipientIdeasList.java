@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea;
 
+import android.app.ListFragment;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -8,16 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
-import roboguice.fragment.RoboListFragment;
+import com.sgrailways.giftidea.wiring.BaseActivity;
+
+import javax.inject.Inject;
 
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
-public class RecipientIdeasList extends RoboListFragment {
+public class RecipientIdeasList extends ListFragment {
     @Inject Ideas ideas;
     @Inject ListenerFactory listenerFactory;
     @Inject Session session;
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((BaseActivity)getActivity()).inject(this);
+    }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(

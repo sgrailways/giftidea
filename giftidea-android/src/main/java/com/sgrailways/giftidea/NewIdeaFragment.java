@@ -13,15 +13,15 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.common.base.Joiner;
-import com.google.inject.Inject;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.db.Ideas;
+import com.sgrailways.giftidea.wiring.BaseFragment;
 import com.sgrailways.statham.ActionFactory;
-import roboguice.fragment.RoboFragment;
 
+import javax.inject.Inject;
 import java.util.LinkedHashSet;
 
-public class NewIdeaFragment extends RoboFragment {
+public class NewIdeaFragment extends BaseFragment {
     @Inject Ideas ideas;
     @Inject ActionFactory actionFactory;
     @Inject HashTagLocator hashTagLocator;

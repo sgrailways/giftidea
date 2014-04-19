@@ -1,19 +1,30 @@
 package com.sgrailways.giftidea.wiring;
 
-import com.sgrailways.giftidea.AboutActivity;
-import com.sgrailways.giftidea.actions.StdActionFactory;
-import com.sgrailways.statham.ActionFactory;
+import android.app.Activity;
+import android.content.Context;
+import com.sgrailways.giftidea.ListenerFactory;
+import com.sgrailways.giftidea.RecipientIdeasList;
 import dagger.Module;
 import dagger.Provides;
 
 import javax.inject.Singleton;
 
-@Module(injects = {
-    AboutActivity.class
-})
+@Module(
+        library = true,
+        addsTo = AndroidModule.class,
+        injects = {
+                ListenerFactory.class,
+                RecipientIdeasList.class
+        }
+)
 public class ActivityModule {
+    private final Activity activity;
 
-    @Provides @Singleton ActionFactory provideActionFactory() {
-        return new StdActionFactory();
+    public ActivityModule(Activity activity) {
+        this.activity = activity;
+    }
+
+    @Provides @Singleton @ForActivity Context providesActivityContext() {
+        return activity;
     }
 }

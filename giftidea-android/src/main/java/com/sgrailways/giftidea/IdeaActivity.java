@@ -1,10 +1,10 @@
 package com.sgrailways.giftidea;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import roboguice.activity.RoboFragmentActivity;
+import com.sgrailways.giftidea.wiring.BaseActivity;
 
-public class IdeaActivity extends RoboFragmentActivity {
+public class IdeaActivity extends BaseActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -16,6 +16,6 @@ public class IdeaActivity extends RoboFragmentActivity {
             fragment = new NewIdeaFragment();
         }
         fragment.setHasOptionsMenu(true);
-        getSupportFragmentManager().beginTransaction().replace(R.id.new_idea, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.new_idea, fragment).commit();
     }
 }

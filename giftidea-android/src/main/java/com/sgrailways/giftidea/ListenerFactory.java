@@ -6,15 +6,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.GotItEvent;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
+import com.sgrailways.giftidea.wiring.ForActivity;
 import com.squareup.otto.Bus;
 
-@Singleton
+import javax.inject.Inject;
+
 public class ListenerFactory {
     private final Bus bus;
     private final Toaster toaster;
@@ -23,7 +23,7 @@ public class ListenerFactory {
     private final Session session;
 
     @Inject
-    public ListenerFactory(Bus bus, Toaster toaster, Context context, DialogDismissListener dialogDismissListener, Session session) {
+    public ListenerFactory(Bus bus, Toaster toaster, @ForActivity Context context, DialogDismissListener dialogDismissListener, Session session) {
         this.bus = bus;
         this.toaster = toaster;
         this.context = context;

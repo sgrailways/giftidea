@@ -3,13 +3,16 @@ package com.sgrailways.giftidea.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.google.inject.Inject;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
 
+import javax.inject.Inject;
+
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.db.Database.RecipientsTable.*;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.IDEAS_COUNT;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
+import static com.sgrailways.giftidea.db.Database.RecipientsTable.TABLE_NAME;
 
 public class Recipients {
     private final static String[] COLUMNS = new String[]{_ID, NAME, IDEAS_COUNT};

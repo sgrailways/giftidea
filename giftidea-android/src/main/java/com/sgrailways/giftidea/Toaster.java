@@ -2,15 +2,17 @@ package com.sgrailways.giftidea;
 
 import android.content.Context;
 import android.widget.Toast;
-import com.google.inject.Inject;
-import roboguice.inject.ContextSingleton;
+import com.sgrailways.giftidea.wiring.ForApplication;
 
-@ContextSingleton
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class Toaster {
     private final Context context;
 
     @Inject
-    public Toaster(Context context) {
+    public Toaster(@ForApplication Context context) {
         this.context = context;
     }
 

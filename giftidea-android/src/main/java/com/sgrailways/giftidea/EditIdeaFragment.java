@@ -13,13 +13,14 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.common.base.Strings;
-import com.google.inject.Inject;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.domain.Idea;
+import com.sgrailways.giftidea.wiring.BaseFragment;
 import com.sgrailways.statham.ActionFactory;
-import roboguice.fragment.RoboFragment;
 
-public class EditIdeaFragment extends RoboFragment {
+import javax.inject.Inject;
+
+public class EditIdeaFragment extends BaseFragment {
     @Inject Ideas ideas;
     @Inject Session session;
     @Inject ActionFactory actionFactory;

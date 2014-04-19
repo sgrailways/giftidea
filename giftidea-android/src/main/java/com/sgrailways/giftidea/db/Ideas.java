@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.google.common.base.CharMatcher;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.domain.Idea;
@@ -15,12 +12,12 @@ import com.sgrailways.giftidea.domain.MissingIdea;
 import com.sgrailways.giftidea.domain.MissingRecipient;
 import com.sgrailways.giftidea.domain.Recipient;
 
+import javax.inject.Inject;
 import java.util.LinkedHashSet;
 
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IS_DONE;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
-@Singleton
 public class Ideas {
     private final SQLiteDatabase writeableDatabase;
     private final Recipients recipients;
