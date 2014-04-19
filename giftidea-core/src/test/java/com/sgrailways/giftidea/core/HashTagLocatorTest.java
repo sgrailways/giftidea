@@ -3,10 +3,10 @@ package com.sgrailways.giftidea.core;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,9 +24,15 @@ public class HashTagLocatorTest {
     }
 
     @Test public void shouldReturnSingleHashTag() {
+        // arrange
+        Set<String> expected = new HashSet<>();
+        expected.add("#one");
+
+        // act
         Set<String> hashTags = hashTagLocator.findAllIn("just the #one tag");
-        assertThat(hashTags.size(), is(1));
-        assertThat(hashTags, is((Set) newHashSet("#one")));
+
+        // assert
+        assertThat(hashTags, is(expected));
     }
 
     @Test public void shouldReturnMultipleHashTagsInInsertionOrder() {

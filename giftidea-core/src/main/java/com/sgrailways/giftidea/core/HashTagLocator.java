@@ -1,7 +1,5 @@
 package com.sgrailways.giftidea.core;
 
-import com.google.common.base.CharMatcher;
-
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -9,11 +7,13 @@ import java.util.regex.Pattern;
 
 public class HashTagLocator {
 
-    private final Pattern pattern = Pattern.compile("(#\\w+)");
+    private static final Pattern HASHTAG = Pattern.compile("(#\\w+)");
+    private static final Pattern STRAY_HASH = Pattern.compile("#");
+    private static final Pattern[] REMOVAL_PATTERNS = new Pattern[] {HASHTAG, STRAY_HASH};
 
     public LinkedHashSet<String> findAllIn(String s) {
         LinkedHashSet<String> hashTags = new LinkedHashSet<String>();
-        Matcher matcher = pattern.matcher(s);
+        Matcher matcher = HASHTAG.matcher(s);
         while(matcher.find()) {
             hashTags.add(matcher.group().toLowerCase(Locale.getDefault()));
         }
@@ -21,12 +21,13 @@ public class HashTagLocator {
     }
 
     public String removeAllFrom(String s) {
-        Matcher matcher = pattern.matcher(s);
-        String hashTagFree = s;
-        while (matcher.find()) {
-            hashTagFree = hashTagFree.replaceAll(matcher.group(), "");
+        String result = s;
+        for(Pattern p : REMOVAL_PATTERNS) {
+            Matcher matcher = p.matcher(s);
+            while(matcher.find()) {
+                result = result.replaceAll(matcher.group(), "");
+            }
         }
-        hashTagFree = CharMatcher.is('#').removeFrom(hashTagFree);
-        return CharMatcher.WHITESPACE.collapseFrom(hashTagFree, ' ').trim();
+        return result.replaceAll("\\s+", " ").trim();
     }
 }
