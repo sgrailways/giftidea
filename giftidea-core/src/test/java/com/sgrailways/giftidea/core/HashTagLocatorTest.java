@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -19,14 +20,19 @@ public class HashTagLocatorTest {
     }
 
     @Test public void shouldReturnEmptySetWhenNone() {
+        // arrange
+        Set<String> expected = new HashSet<>();
+
+        // act
         Set<String> hashTags = hashTagLocator.findAllIn("no tags here");
-        assertThat(hashTags.size(), is(0));
+
+        // assert
+        assertThat(hashTags, is(expected));
     }
 
     @Test public void shouldReturnSingleHashTag() {
         // arrange
-        Set<String> expected = new HashSet<>();
-        expected.add("#one");
+        Set<String> expected = new HashSet<>(asList("#one"));
 
         // act
         Set<String> hashTags = hashTagLocator.findAllIn("just the #one tag");
@@ -35,24 +41,38 @@ public class HashTagLocatorTest {
         assertThat(hashTags, is(expected));
     }
 
-    @Test public void shouldReturnMultipleHashTagsInInsertionOrder() {
+    @Test public void shouldReturnHashTagsInInsertionOrder() {
+        // arrange
         Set<String> hashTags = hashTagLocator.findAllIn("#more tags #than7 you'd expect #");
-        assertThat(hashTags.size(), is(2));
+
+        // act
         Iterator<String> iterator = hashTags.iterator();
+
+        // assert
+        assertThat(hashTags.size(), is(2));
         assertThat(iterator.next(), is("#more"));
         assertThat(iterator.next(), is("#than7"));
     }
 
     @Test public void shouldReturnNotDuplicateHashTags() {
+        // arrange
+        Set<String> expected = new HashSet<>(asList("#more", "#than7"));
+
+        // act
         Set<String> hashTags = hashTagLocator.findAllIn("#more tags #than7 you'd #MORE expect #");
-        assertThat(hashTags.size(), is(2));
-        Iterator<String> iterator = hashTags.iterator();
-        assertThat(iterator.next(), is("#more"));
-        assertThat(iterator.next(), is("#than7"));
+
+        // assert
+        assertThat(hashTags, is(expected));
     }
 
     @Test public void shouldRemoveHashTags() {
+        // arrange
+        String expected = "tags you'd expect";
+
+        // act
         String cleaned = hashTagLocator.removeAllFrom("#more tags #than7 you'd #MORE expect #");
-        assertThat(cleaned, is("tags you'd expect"));
+
+        // assert
+        assertThat(cleaned, is(expected));
     }
 }
