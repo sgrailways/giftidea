@@ -1,4 +1,4 @@
-package com.sgrailways.giftidea.domain;
+package com.sgrailways.giftidea.core.domain;
 
 public class Recipient {
     private final long id;

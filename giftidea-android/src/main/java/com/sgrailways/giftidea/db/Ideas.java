@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.common.base.CharMatcher;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.core.HashTagLocator;
-import com.sgrailways.giftidea.domain.Idea;
-import com.sgrailways.giftidea.domain.MissingIdea;
-import com.sgrailways.giftidea.domain.MissingRecipient;
-import com.sgrailways.giftidea.domain.Recipient;
+import com.sgrailways.giftidea.core.domain.Idea;
+import com.sgrailways.giftidea.core.domain.MissingIdea;
+import com.sgrailways.giftidea.core.domain.MissingRecipient;
+import com.sgrailways.giftidea.core.domain.Recipient;
 
 import javax.inject.Inject;
 import java.util.LinkedHashSet;

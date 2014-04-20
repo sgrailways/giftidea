@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.common.base.Strings;
 import com.sgrailways.giftidea.db.Ideas;
-import com.sgrailways.giftidea.domain.Idea;
+import com.sgrailways.giftidea.core.domain.Idea;
 import com.sgrailways.giftidea.wiring.BaseFragment;
 import com.sgrailways.statham.ActionFactory;
 
