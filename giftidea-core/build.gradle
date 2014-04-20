@@ -5,6 +5,7 @@ repositories {
 }
 
 dependencies {
+  compile 'com.squareup.dagger:dagger:1.2.+'
   testCompile 'junit:junit:4.11'
 }
 

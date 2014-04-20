@@ -1,15 +1,21 @@
 package com.sgrailways.giftidea.core;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Singleton
 public class HashTagLocator {
-
     private static final Pattern HASHTAG = Pattern.compile("(#\\w+)");
     private static final Pattern STRAY_HASH = Pattern.compile("#");
     private static final Pattern[] REMOVAL_PATTERNS = new Pattern[] {HASHTAG, STRAY_HASH};
+
+    @Inject
+    public HashTagLocator() {
+    }
 
     public LinkedHashSet<String> findAllIn(String s) {
         LinkedHashSet<String> hashTags = new LinkedHashSet<String>();
