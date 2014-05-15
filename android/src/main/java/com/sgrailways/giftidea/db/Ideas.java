@@ -16,7 +16,6 @@ import com.sgrailways.giftidea.core.domain.Recipient;
 import javax.inject.Inject;
 import java.util.LinkedHashSet;
 
-import static com.sgrailways.giftidea.db.Database.IdeasTable.IS_DONE;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
 public class Ideas {
@@ -26,7 +25,7 @@ public class Ideas {
     private final Recipients recipients;
     private final Clock clock;
     private final HashTagLocator hashTagLocator;
-    private final static String[] COLUMNS = new String[]{
+    public final static String[] COLUMNS = new String[]{
             Database.IdeasTable._ID,
             Database.IdeasTable.IDEA,
             Database.IdeasTable.IS_DONE,
@@ -51,11 +50,6 @@ public class Ideas {
         return idea;
     }
 
-    public Cursor findAllForRecipientName(String name) {
-        String recipientId = String.valueOf(recipients.findByName(name).getId());
-        return writeableDatabase.query(TABLE_NAME, COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{recipientId}, null, null, IS_DONE + " ASC");
-    }
-
     public Remaining delete(long id) {
         Remaining ideasRemaining;
             Idea idea = findById(id);
@@ -71,12 +65,6 @@ public class Ideas {
                 ideasRemaining = Remaining.YES;
             }
             return ideasRemaining;
-    }
-
-    public Remaining forRecipient(String recipientName) {
-        long recipientId = recipients.findByName(recipientName).getId();
-        long ideasCount = DatabaseUtils.longForQuery(writeableDatabase, String.format("SELECT COUNT(*) FROM %s WHERE %s=?", TABLE_NAME, Database.IdeasTable.RECIPIENT_ID), new String[]{String.valueOf(recipientId)});
-        return ideasCount == 0 ? Remaining.NO : Remaining.YES;
     }
 
     public void update(long id, String idea) {

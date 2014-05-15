@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
+import com.sgrailways.giftidea.core.domain.Recipient;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.GotItEvent;
 import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
@@ -41,35 +42,35 @@ public class ListenerFactory {
         };
     }
 
-    public View.OnClickListener gotItListener(final Long id, final String recipientName, final String message) {
+    public View.OnClickListener gotItListener(final Long id, final Recipient recipient, final String message) {
         return new View.OnClickListener() {
             public void onClick(View v) {
-                bus.post(new GotItEvent(id, recipientName));
+                bus.post(new GotItEvent(id, recipient.getName()));
                 toaster.show(message);
                 bus.post(new RefreshIdeasListEvent());
             }
         };
     }
 
-    public View.OnClickListener editIdeaListener(final Long id, final String recipientName) {
+    public View.OnClickListener editIdeaListener(final Long id, final Recipient recipient) {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, IdeaActivity.class);
                 intent.putExtra("ideaId", id);
-                session.setRecipientName(recipientName);
+                session.setActiveRecipient(recipient);
                 context.startActivity(intent);
             }
         };
     }
 
-    public View.OnClickListener confirmDeleteListener(final Long id, final String recipientName, final String deletedMessage, final Activity activity) {
+    public View.OnClickListener confirmDeleteListener(final Long id, final Recipient recipient, final String deletedMessage, final Activity activity) {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(activity)
                         .setNegativeButton(R.string.cancel, dialogDismissListener)
                         .setPositiveButton(R.string.delete, deleteIdeaListener(id, deletedMessage))
                         .setTitle(R.string.confirmation)
-                        .setMessage("Delete idea for " + recipientName + "?");
+                        .setMessage("Delete idea for " + recipient.getName() + "?");
                 alert.create().show();
             }
         };

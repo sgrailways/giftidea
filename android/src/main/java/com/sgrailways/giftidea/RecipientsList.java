@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.sgrailways.giftidea.db.Recipients;
 import com.sgrailways.giftidea.wiring.BaseActivity;
 
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     private static final int RECIPIENTS_LOADER = 111;
     private SimpleCursorAdapter adapter;
     @Inject Session session;
+    @Inject Recipients recipients;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,8 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
                 rootView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent intent = new Intent(RecipientsList.this.getActivity(), RecipientIdeasActivity.class);
-                        session.setRecipientName(((TextView) v.findViewById(R.id.name)).getText().toString());
+                        String name = ((TextView) v.findViewById(R.id.name)).getText().toString();
+                        session.setActiveRecipient(recipients.findByName(name));
                         startActivity(intent);
                     }
                 });

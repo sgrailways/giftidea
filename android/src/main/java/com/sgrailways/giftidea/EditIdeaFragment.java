@@ -53,7 +53,7 @@ public class EditIdeaFragment extends BaseFragment {
                 isValid = validateIdeaEditText();
             }
         });
-        recipient.setText(session.getRecipientName());
+        recipient.setText(session.getActiveRecipientName());
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
