@@ -1,2 +1,2 @@
-include 'giftidea-android', 'giftidea-core'
+include 'android', 'core'
 

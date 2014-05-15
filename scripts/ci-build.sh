@@ -2,4 +2,4 @@
 set -e
 
 env
-./gradlew clean :giftidea-core:build :giftidea-android:assembleDebug lint
+./gradlew clean :core:build :android:assembleDebug lint
