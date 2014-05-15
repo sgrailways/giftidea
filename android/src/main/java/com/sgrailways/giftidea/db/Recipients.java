@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea.db;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,8 @@ import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.TABLE_NAME;
 
 public class Recipients {
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/com.sgrailways.giftidea_recipients";
+    public static final String CONTENT_RECIPIENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/com.sgrailways.giftidea_recipients";
     private final static String[] COLUMNS = new String[]{_ID, NAME, IDEAS_COUNT};
     private final Clock clock;
     private final SQLiteDatabase writeableDatabase;
@@ -43,10 +46,6 @@ public class Recipients {
         Recipient recipient = new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
         cursor.close();
         return recipient;
-    }
-
-    public Cursor findAllOrderedByName() {
-        return writeableDatabase.query(TABLE_NAME, COLUMNS, null, null, null, null, NAME + " ASC");
     }
 
     public Recipient createFromName(String name) {

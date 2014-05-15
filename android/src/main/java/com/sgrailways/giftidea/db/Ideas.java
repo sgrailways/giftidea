@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea.db;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -19,6 +20,8 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.IS_DONE;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.TABLE_NAME;
 
 public class Ideas {
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/com.sgrailways.giftidea_ideas";
+    public static final String CONTENT_IDEA_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/com.sgrailways.giftidea_ideas";
     private final SQLiteDatabase writeableDatabase;
     private final Recipients recipients;
     private final Clock clock;
