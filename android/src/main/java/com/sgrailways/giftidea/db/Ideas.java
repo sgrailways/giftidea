@@ -50,21 +50,16 @@ public class Ideas {
         return idea;
     }
 
-    public Remaining delete(long id) {
-        Remaining ideasRemaining;
-            Idea idea = findById(id);
-            if(!idea.isDone()) {
-                recipients.decrementIdeaCountFor(idea.getRecipientId());
-            }
-            writeableDatabase.delete(TABLE_NAME, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
-            long ideasForRecipient = DatabaseUtils.longForQuery(writeableDatabase, String.format("SELECT COUNT(*) FROM %s WHERE %s=?", TABLE_NAME, Database.IdeasTable.RECIPIENT_ID), new String[]{String.valueOf(idea.getRecipientId())});
-            if (ideasForRecipient == 0) {
-                writeableDatabase.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(idea.getRecipientId())});
-                ideasRemaining = Remaining.NO;
-            } else {
-                ideasRemaining = Remaining.YES;
-            }
-            return ideasRemaining;
+    public void delete(long id) {
+        Idea idea = findById(id);
+        if (!idea.isDone()) {
+            recipients.decrementIdeaCountFor(idea.getRecipientId());
+        }
+        writeableDatabase.delete(TABLE_NAME, Database.IdeasTable._ID + "=?", new String[]{String.valueOf(id)});
+        long ideasForRecipient = DatabaseUtils.longForQuery(writeableDatabase, String.format("SELECT COUNT(*) FROM %s WHERE %s=?", TABLE_NAME, Database.IdeasTable.RECIPIENT_ID), new String[]{String.valueOf(idea.getRecipientId())});
+        if (ideasForRecipient == 0) {
+            writeableDatabase.delete(Database.RecipientsTable.TABLE_NAME, Database.RecipientsTable._ID + "=?", new String[]{String.valueOf(idea.getRecipientId())});
+        }
     }
 
     public void update(long id, String idea) {
@@ -118,9 +113,5 @@ public class Ideas {
         if(!(recipient instanceof MissingRecipient)) {
             recipients.decrementIdeaCountFor(recipient);
         }
-    }
-
-    public enum Remaining {
-        YES, NO
     }
 }
