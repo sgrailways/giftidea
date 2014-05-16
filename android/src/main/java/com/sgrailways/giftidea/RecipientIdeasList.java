@@ -6,12 +6,11 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.sgrailways.giftidea.core.domain.Recipient;
 import com.sgrailways.giftidea.db.Database;
@@ -20,6 +19,7 @@ import com.sgrailways.giftidea.wiring.BaseActivity;
 
 import javax.inject.Inject;
 
+import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -51,6 +51,7 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
                     return false;
                 }
                 final long id = cursor.getLong(0);
+                view.setId((int)id);
                 String ideaString = cursor.getString(1);
                 idea.setText(ideaString);
                 Recipient recipient = session.getActiveRecipient();
@@ -77,7 +78,7 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     @Override public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case IDEAS_LOADER:
-                return new CursorLoader(getActivity(), Uri.parse("content://com.sgrailways.giftidea/ideas"), Ideas.COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{session.getActiveRecipientId()}, null);
+                return new CursorLoader(getActivity(), Ideas.URI, Ideas.COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{session.getActiveRecipientId()}, _ID + " ASC");
             default:
                 return null;
         }

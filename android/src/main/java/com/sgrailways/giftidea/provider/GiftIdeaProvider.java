@@ -84,12 +84,13 @@ public class GiftIdeaProvider extends ContentProvider {
             throw new IllegalArgumentException("Unsupported URI for inserting: " + uri);
         }
         SQLiteDatabase db = helper.getWritableDatabase();
+        long id;
         if(URI_MATCHER.match(uri) == RECIPIENTS_LIST) {
-            long id = db.insert(Database.RecipientsTable.TABLE_NAME, null, contentValues);
-            return uriFromId(id, uri);
-
+            id = db.insert(Database.RecipientsTable.TABLE_NAME, null, contentValues);
+        } else {
+            id = db.insert(Database.IdeasTable.TABLE_NAME, null, contentValues);
         }
-        long id = db.insert(Database.IdeasTable.TABLE_NAME, null, contentValues);
+        getContext().getContentResolver().notifyChange(uri, null);
         return uriFromId(id, uri);
     }
 

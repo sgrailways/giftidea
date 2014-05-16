@@ -3,7 +3,7 @@ package com.sgrailways.giftidea.db;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.core.domain.MissingRecipient;
 import com.sgrailways.giftidea.core.domain.Recipient;
@@ -13,39 +13,35 @@ import javax.inject.Inject;
 import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.IDEAS_COUNT;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
-import static com.sgrailways.giftidea.db.Database.RecipientsTable.TABLE_NAME;
 
 public class Recipients {
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/com.sgrailways.giftidea_recipients";
     public static final String CONTENT_RECIPIENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/com.sgrailways.giftidea_recipients";
     private final static String[] COLUMNS = new String[]{_ID, NAME, IDEAS_COUNT};
+    public static final Uri URI = Uri.parse("content://com.sgrailways.giftidea/recipients");
     private final Clock clock;
-    private final SQLiteDatabase writeableDatabase;
+    private final ContentResolver resolver;
 
     @Inject
-    public Recipients(Database database, Clock clock) {
+    public Recipients(Clock clock, ContentResolver resolver) {
         this.clock = clock;
-        this.writeableDatabase = database.getWritableDatabase();
+        this.resolver = resolver;
     }
 
     public Recipient findById(long id) {
-        Cursor cursor = writeableDatabase.query(TABLE_NAME, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null, null, null, "1");
+        Cursor cursor = resolver.query(URI, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null);
         if(!cursor.moveToFirst()) {
             return new MissingRecipient();
         }
-        Recipient recipient = new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
-        cursor.close();
-        return recipient;
+        return new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
     }
 
     public Recipient findByName(String name) {
-        Cursor cursor = writeableDatabase.query(TABLE_NAME, COLUMNS, NAME + "=?", new String[]{name}, null, null, null, "1");
+        Cursor cursor = resolver.query(URI, COLUMNS, NAME + "=?", new String[]{name}, null);
         if(!cursor.moveToFirst()) {
             return new MissingRecipient();
         }
-        Recipient recipient = new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
-        cursor.close();
-        return recipient;
+        return new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
     }
 
     public Recipient createFromName(String name) {
@@ -55,8 +51,8 @@ public class Recipients {
         values.put(Database.RecipientsTable.IDEAS_COUNT, 1L);
         values.put(Database.RecipientsTable.CREATED_AT, now);
         values.put(Database.RecipientsTable.UPDATED_AT, now);
-        long id = writeableDatabase.insert(Database.RecipientsTable.TABLE_NAME, null, values);
-        return new Recipient(id, name, 1L);
+        Uri uri = resolver.insert(URI, values);
+        return new Recipient(Long.valueOf(uri.getLastPathSegment()), name, 1L);
     }
 
     public Recipient incrementIdeaCountFor(Recipient recipient) {
@@ -71,7 +67,7 @@ public class Recipients {
         ContentValues values = new ContentValues();
         values.put(Database.RecipientsTable.UPDATED_AT, clock.now());
         values.put(Database.RecipientsTable.IDEAS_COUNT, newIdeaCount);
-        writeableDatabase.update(TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
+        resolver.update(URI, values, _ID + "=?", new String[]{String.valueOf(recipient.getId())});
         return new Recipient(recipient.getId(), recipient.getName(), newIdeaCount);
     }
 

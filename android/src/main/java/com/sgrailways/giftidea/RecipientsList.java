@@ -6,7 +6,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
@@ -81,7 +80,7 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     @Override public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case RECIPIENTS_LOADER:
-                return new CursorLoader(getActivity(), Uri.parse("content://com.sgrailways.giftidea/recipients"), null, null, null, null);
+                return new CursorLoader(getActivity(), Recipients.URI, null, null, null, null);
             default:
                 return null;
         }
