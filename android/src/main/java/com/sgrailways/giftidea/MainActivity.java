@@ -12,7 +12,11 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientsList()).commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.recipients, new RecipientsList())
+                .replace(R.id.upcoming, new UpcomingEventsFragment())
+                .commit();
     }
 
     @Override

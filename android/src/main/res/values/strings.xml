@@ -34,5 +34,9 @@
     <string name="license_label">License</string>
     <string name="code">github.com/sgrailways/giftidea</string>
     <string name="code_label">Code</string>
+  <string name="days">days</string>
+  <string name="day">day</string>
+  <string name="in">in</string>
+  <string name="no_celebration">Bah! Humbug!</string>
 
 </resources>

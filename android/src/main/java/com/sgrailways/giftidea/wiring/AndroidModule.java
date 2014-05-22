@@ -10,6 +10,7 @@ import com.sgrailways.giftidea.MainActivity;
 import com.sgrailways.giftidea.NewIdeaFragment;
 import com.sgrailways.giftidea.RecipientIdeasActivity;
 import com.sgrailways.giftidea.RecipientsList;
+import com.sgrailways.giftidea.UpcomingEventsFragment;
 import com.sgrailways.giftidea.actions.Statham;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.db.Recipients;
@@ -28,6 +29,7 @@ import javax.inject.Singleton;
         RecipientIdeasActivity.class,
         NewIdeaFragment.class,
         EditIdeaFragment.class,
+        UpcomingEventsFragment.class,
         Recipients.class,
         Ideas.class
 },
