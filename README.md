@@ -1,6 +1,6 @@
 GiftIdea!
 =========
-[![Build Status](http://build.sgrailways.com/buildStatus/icon?job=giftidea)](http://build.sgrailways.com/job/giftidea/)
+[![Build Status](https://drone.io/github.com/sgrailways/giftidea/status.png)](https://drone.io/github.com/sgrailways/giftidea/latest)
 
 An Open-Source Android Application for Gift Ideas
 
