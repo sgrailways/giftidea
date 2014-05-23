@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_marginTop="12dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+  <LinearLayout
+      android:gravity="center_horizontal"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/countdown_configuration_leader_label"
+        android:text="@string/countdown_configuration_leader_label"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/countdown_configuration_holiday_label"
+        android:text="Memorial Day"
+        android:textStyle="italic"
+        android:layout_marginLeft="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="@string/question_mark"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="20dp"
+      android:gravity="center_horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/keep_countdown"
+        android:text="@string/keep_countdown"
+        android:textAllCaps="true"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/stop_countdown"
+        android:text="@string/stop_countdown"
+        android:textAllCaps="true"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+</LinearLayout>
