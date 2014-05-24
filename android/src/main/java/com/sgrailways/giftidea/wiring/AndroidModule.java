@@ -31,6 +31,7 @@ import javax.inject.Singleton;
         EditIdeaFragment.class,
         UpcomingEventsFragment.class,
         GiftIdeaApplication.class,
+        UpcomingEventsFragment.class,
         Recipients.class,
         Ideas.class
 },
