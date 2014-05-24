@@ -30,6 +30,7 @@ import javax.inject.Singleton;
         NewIdeaFragment.class,
         EditIdeaFragment.class,
         UpcomingEventsFragment.class,
+        GiftIdeaApplication.class,
         Recipients.class,
         Ideas.class
 },

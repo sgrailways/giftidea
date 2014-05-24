@@ -4,16 +4,25 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
+import com.sgrailways.giftidea.core.domain.Holiday;
 import com.sgrailways.giftidea.wiring.ForApplication;
+import org.joda.time.DateTime;
+import timber.log.Timber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
+
+import static java.util.Locale.US;
+import static org.joda.time.DateTimeZone.UTC;
 
 @Singleton
 public class Database extends SQLiteOpenHelper {
     private final static String NAME = "giftidea.db";
-    private final static int VERSION = 2;
+    private final static int VERSION = 3;
 
     @Inject
     public Database(@ForApplication Context context) {
@@ -37,11 +46,14 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL(createRecipients);
         db.execSQL(createIdeas);
+        db.execSQL(HolidaysTable.CREATE_STATEMENT);
+        bootstrapHolidays(db);
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS IDX_RECIPIENTS_NAME ON " + RecipientsTable.TABLE_NAME + "(" + RecipientsTable.NAME + ")");
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion == 1 && newVersion == 2) {
+        Timber.i("Upgrading database from %d to %d", oldVersion, newVersion);
+        if(oldVersion == 1) {
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS IDX_RECIPIENTS_NAME ON " + RecipientsTable.TABLE_NAME + " (" + RecipientsTable.NAME + ")");
             db.execSQL("ALTER TABLE " + RecipientsTable.TABLE_NAME + " ADD COLUMN " + RecipientsTable.IDEAS_COUNT + " integer");
             Cursor cursor = db.query(RecipientsTable.TABLE_NAME, new String[]{RecipientsTable._ID}, null, null, null, null, null);
@@ -60,6 +72,62 @@ public class Database extends SQLiteOpenHelper {
             }
             cursor.close();
         }
+        if(oldVersion == 1 || oldVersion == 2) {
+            db.execSQL(HolidaysTable.CREATE_STATEMENT);
+            bootstrapHolidays(db);
+        }
+    }
+
+    public void upgrade() {
+        SQLiteDatabase writableDatabase = getWritableDatabase();
+        writableDatabase.close();
+    }
+
+    private static void bootstrapHolidays(SQLiteDatabase db) {
+        SQLiteStatement statement = db.compileStatement(HolidaysTable.INSERT_STATEMENT);
+        DateTime now = DateTime.now(UTC);
+        db.beginTransaction();
+        for(Holiday holiday : Arrays.asList(
+                // 2014
+                new Holiday(US, "Father's Day", new DateTime(2014, 6, 15, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Grandparents Day", new DateTime(2014, 9, 7, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Programmers' Day", new DateTime(2014, 9, 13, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Boss's Day", new DateTime(2014, 10, 16, 0, 0, UTC), true, now, now),
+
+                // 2015
+                new Holiday(US, "Valentine's Day", new DateTime(2015, 2, 14, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Administrative Professionals' Day", new DateTime(2015, 4, 22, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Teacher Appreciation Day", new DateTime(2015, 5, 5, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Siblings Day", new DateTime(2015, 4, 10, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Mother's Day", new DateTime(2015, 5, 10, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Father's Day", new DateTime(2015, 6, 21, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Boss's Day", new DateTime(2015, 10, 16, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Grandparents Day", new DateTime(2015, 9, 13, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Programmers' Day", new DateTime(2015, 9, 13, 0, 0, UTC), true, now, now),
+
+                // 2016
+                new Holiday(US, "Valentine's Day", new DateTime(2016, 2, 14, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Administrative Professionals' Day", new DateTime(2016, 4, 27, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Teacher Appreciation Day", new DateTime(2016, 5, 3, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Siblings Day", new DateTime(2016, 4, 10, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Mother's Day", new DateTime(2016, 5, 8, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Father's Day", new DateTime(2016, 6, 19, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Boss's Day", new DateTime(2016, 10, 17, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Grandparents Day", new DateTime(2016, 9, 11, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Programmers' Day", new DateTime(2016, 9, 12, 0, 0, UTC), true, now, now)
+        )) {
+            statement.bindAllArgsAsStrings(new String[]{
+                    holiday.getName(),
+                    holiday.getLocale(),
+                    String.valueOf(holiday.isCelebrated()),
+                    holiday.getCelebratedAt(),
+                    holiday.getCreatedAt(),
+                    holiday.getUpdatedAt()
+            });
+            statement.executeInsert();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public static class RecipientsTable implements BaseColumns {
@@ -77,5 +145,18 @@ public class Database extends SQLiteOpenHelper {
         public final static String IS_DONE = "is_done";
         public final static String CREATED_AT = "created_at";
         public final static String UPDATED_AT = "updated_at";
+    }
+
+    public static class HolidaysTable implements BaseColumns {
+        public final static String TABLE_NAME = "holidays";
+        public final static String LOCALE = "locale";
+        public final static String NAME = "name";
+        public final static String IS_CELEBRATED = "is_celebrated";
+        public final static String CELEBRATED_AT = "celebrated_at";
+        public final static String CREATED_AT = "created_at";
+        public final static String UPDATED_AT = "updated_at";
+
+        public final static String CREATE_STATEMENT = "create table " + TABLE_NAME + "(" + _ID + " integer primary key autoincrement," + NAME + " text," + LOCALE + " text," + IS_CELEBRATED + " text," + CELEBRATED_AT + " text," + CREATED_AT + " text," + UPDATED_AT + " text)";
+        public final static String INSERT_STATEMENT = "insert into " + TABLE_NAME + "(" + TextUtils.join(",", Arrays.asList(NAME, LOCALE, IS_CELEBRATED, CELEBRATED_AT, CREATED_AT, UPDATED_AT)) + ") VALUES (?,?,?,?,?,?)";
     }
 }

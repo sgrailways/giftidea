@@ -6,6 +6,7 @@ repositories {
 
 dependencies {
   compile 'com.squareup.dagger:dagger:1.2.+'
+  compile 'joda-time:joda-time:2.2'
   testCompile 'junit:junit:4.11'
 }
 
