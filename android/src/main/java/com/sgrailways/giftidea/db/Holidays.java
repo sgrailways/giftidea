@@ -1,5 +1,6 @@
 package com.sgrailways.giftidea.db;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -21,7 +22,7 @@ public class Holidays {
         SQLiteDatabase db = helper.getWritableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Database.HolidaysTable.TABLE_NAME);
-        builder.appendWhere(Database.HolidaysTable.CELEBRATED_AT + ">" + LocalDate.now().toString(ISODateTimeFormat.basicDate()));
+        builder.appendWhere(Database.HolidaysTable.CELEBRATED_AT + ">" + LocalDate.now().toString(ISODateTimeFormat.basicDate()) + " AND " + Database.HolidaysTable.IS_CELEBRATED + "='" + String.valueOf(true) + "'");
         Cursor cursor= builder.query(db, new String[]{Database.HolidaysTable._ID, Database.HolidaysTable.NAME, Database.HolidaysTable.CELEBRATED_AT}, null, null, null, null, null, "1");
         if(!cursor.moveToFirst()) {
             return null;
@@ -47,5 +48,13 @@ public class Holidays {
         } finally {
             cursor.close();
         }
+    }
+
+    public boolean stopCountdown(long id) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Database.HolidaysTable.IS_CELEBRATED, String.valueOf(false));
+        int rowsAffected = db.update(Database.HolidaysTable.TABLE_NAME, values, Database.HolidaysTable._ID + "=?", new String[]{String.valueOf(id)});
+        return rowsAffected == 1;
     }
 }

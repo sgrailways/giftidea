@@ -42,5 +42,6 @@
   <string name="question_mark">\?</string>
   <string name="stop_countdown">Stop</string>
   <string name="keep_countdown">Continue</string>
+  <string name="stop_countdown_message">Countdown Stopped</string>
 
 </resources>
