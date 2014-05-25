@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.sgrailways.giftidea.core.domain.Holiday;
 import com.sgrailways.giftidea.wiring.ForApplication;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import timber.log.Timber;
 
 import javax.inject.Inject;
@@ -89,32 +90,32 @@ public class Database extends SQLiteOpenHelper {
         db.beginTransaction();
         for(Holiday holiday : Arrays.asList(
                 // 2014
-                new Holiday(US, "Father's Day", new DateTime(2014, 6, 15, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Grandparents Day", new DateTime(2014, 9, 7, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Programmers' Day", new DateTime(2014, 9, 13, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Boss's Day", new DateTime(2014, 10, 16, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Father's Day", new LocalDate(2014, 6, 15), true, now, now),
+                new Holiday(US, "Grandparents Day", new LocalDate(2014, 9, 7), true, now, now),
+                new Holiday(US, "Programmers' Day", new LocalDate(2014, 9, 13), true, now, now),
+                new Holiday(US, "Boss's Day", new LocalDate(2014, 10, 16), true, now, now),
 
                 // 2015
-                new Holiday(US, "Valentine's Day", new DateTime(2015, 2, 14, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Administrative Professionals' Day", new DateTime(2015, 4, 22, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Teacher Appreciation Day", new DateTime(2015, 5, 5, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Siblings Day", new DateTime(2015, 4, 10, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Mother's Day", new DateTime(2015, 5, 10, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Father's Day", new DateTime(2015, 6, 21, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Boss's Day", new DateTime(2015, 10, 16, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Grandparents Day", new DateTime(2015, 9, 13, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Programmers' Day", new DateTime(2015, 9, 13, 0, 0, UTC), true, now, now),
+                new Holiday(US, "Valentine's Day", new LocalDate(2015, 2, 14), true, now, now),
+                new Holiday(US, "Administrative Professionals' Day", new LocalDate(2015, 4, 22), true, now, now),
+                new Holiday(US, "Teacher Appreciation Day", new LocalDate(2015, 5, 5), true, now, now),
+                new Holiday(US, "Siblings Day", new LocalDate(2015, 4, 10), true, now, now),
+                new Holiday(US, "Mother's Day", new LocalDate(2015, 5, 10), true, now, now),
+                new Holiday(US, "Father's Day", new LocalDate(2015, 6, 21), true, now, now),
+                new Holiday(US, "Boss's Day", new LocalDate(2015, 10, 16), true, now, now),
+                new Holiday(US, "Grandparents Day", new LocalDate(2015, 9, 13), true, now, now),
+                new Holiday(US, "Programmers' Day", new LocalDate(2015, 9, 13), true, now, now),
 
                 // 2016
-                new Holiday(US, "Valentine's Day", new DateTime(2016, 2, 14, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Administrative Professionals' Day", new DateTime(2016, 4, 27, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Teacher Appreciation Day", new DateTime(2016, 5, 3, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Siblings Day", new DateTime(2016, 4, 10, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Mother's Day", new DateTime(2016, 5, 8, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Father's Day", new DateTime(2016, 6, 19, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Boss's Day", new DateTime(2016, 10, 17, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Grandparents Day", new DateTime(2016, 9, 11, 0, 0, UTC), true, now, now),
-                new Holiday(US, "Programmers' Day", new DateTime(2016, 9, 12, 0, 0, UTC), true, now, now)
+                new Holiday(US, "Valentine's Day", new LocalDate(2016, 2, 14), true, now, now),
+                new Holiday(US, "Administrative Professionals' Day", new LocalDate(2016, 4, 27), true, now, now),
+                new Holiday(US, "Teacher Appreciation Day", new LocalDate(2016, 5, 3), true, now, now),
+                new Holiday(US, "Siblings Day", new LocalDate(2016, 4, 10), true, now, now),
+                new Holiday(US, "Mother's Day", new LocalDate(2016, 5, 8), true, now, now),
+                new Holiday(US, "Father's Day", new LocalDate(2016, 6, 19), true, now, now),
+                new Holiday(US, "Boss's Day", new LocalDate(2016, 10, 17), true, now, now),
+                new Holiday(US, "Grandparents Day", new LocalDate(2016, 9, 11), true, now, now),
+                new Holiday(US, "Programmers' Day", new LocalDate(2016, 9, 12), true, now, now)
         )) {
             statement.bindAllArgsAsStrings(new String[]{
                     holiday.getName(),
