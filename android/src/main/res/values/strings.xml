@@ -30,10 +30,10 @@
   <string name="ideas_label">ideas</string>
   <string name="idea_label">idea</string>
   <string name="edit_idea_hint">Hummingbird feeder</string>
-    <string name="bsd_license">BSD 3-Clause</string>
-    <string name="license_label">License</string>
-    <string name="code">github.com/sgrailways/giftidea</string>
-    <string name="code_label">Code</string>
+  <string name="bsd_license">BSD 3-Clause</string>
+  <string name="license_label">License</string>
+  <string name="code">github.com/sgrailways/giftidea</string>
+  <string name="code_label">Code</string>
   <string name="days">days</string>
   <string name="day">day</string>
   <string name="in">in</string>
