@@ -1,12 +1,15 @@
 package com.sgrailways.giftidea;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.sgrailways.giftidea.wiring.BaseActivity;
+import com.sgrailways.statham.ActionFactory;
+
+import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity {
+    @Inject ActionFactory actionFactory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,16 +29,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                startActivity(new Intent(this, IdeaActivity.class));
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return actionFactory.create(item, this).invoke();
     }
 
     @Override protected void onResume() {

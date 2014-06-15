@@ -1,6 +1,5 @@
 package com.sgrailways.giftidea;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,11 +38,6 @@ public class RecipientIdeasActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 finish();
-                startActivity(new Intent(this, IdeaActivity.class));
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
             default:
                 return actionFactory.create(item, this).invoke();
         }
