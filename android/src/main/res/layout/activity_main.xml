@@ -11,6 +11,7 @@
 
   <FrameLayout
     android:id="@+id/recipients"
+    android:layout_margin="4dp"
     android:layout_height="wrap_content"
     android:layout_width="match_parent" />
 
