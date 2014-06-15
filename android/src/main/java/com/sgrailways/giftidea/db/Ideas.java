@@ -8,8 +8,8 @@ import com.google.common.base.CharMatcher;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.core.domain.Idea;
-import com.sgrailways.giftidea.core.domain.MissingIdea;
-import com.sgrailways.giftidea.core.domain.MissingRecipient;
+import com.sgrailways.giftidea.core.domain.NullIdea;
+import com.sgrailways.giftidea.core.domain.NullRecipient;
 import com.sgrailways.giftidea.core.domain.Recipient;
 
 import javax.inject.Inject;
@@ -43,8 +43,8 @@ public class Ideas {
 
     public Idea findById(long id) {
         Cursor cursor = resolver.query(URI, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null);
-        if(!cursor.moveToFirst()) {
-            return new MissingIdea();
+        if (!cursor.moveToFirst()) {
+            return new NullIdea();
         }
         return new Idea(cursor.getLong(0), cursor.getString(1), Boolean.parseBoolean(cursor.getString(2)), cursor.getLong(3));
     }
@@ -79,7 +79,7 @@ public class Ideas {
         for (String hashTag : hashTags) {
             Recipient recipient = recipients.findByName(hashTag);
             long recipientId;
-            if (recipient instanceof MissingRecipient) {
+            if (recipient instanceof NullRecipient) {
                 recipientId = recipients.createFromName(hashTag).getId();
             } else {
                 recipientId = recipient.getId();
@@ -97,7 +97,7 @@ public class Ideas {
         resolver.update(URI, values, _ID + "=?", new String[]{String.valueOf(id)});
 
         Recipient recipient = recipients.findByName(recipientName);
-        if(!(recipient instanceof MissingRecipient)) {
+        if (!(recipient instanceof NullRecipient)) {
             recipients.decrementIdeaCountFor(recipient);
         }
     }

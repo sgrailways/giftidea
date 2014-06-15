@@ -1,8 +1,8 @@
 package com.sgrailways.giftidea.core.domain;
 
-public class MissingRecipient extends Recipient {
+public class NullRecipient extends Recipient {
 
-    public MissingRecipient() {
+    public NullRecipient() {
         super(Long.MIN_VALUE, "", Long.MIN_VALUE);
     }
 }

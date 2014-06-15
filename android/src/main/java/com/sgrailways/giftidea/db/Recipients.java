@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import com.sgrailways.giftidea.Clock;
-import com.sgrailways.giftidea.core.domain.MissingRecipient;
+import com.sgrailways.giftidea.core.domain.NullRecipient;
 import com.sgrailways.giftidea.core.domain.Recipient;
 
 import javax.inject.Inject;
@@ -30,16 +30,16 @@ public class Recipients {
 
     public Recipient findById(long id) {
         Cursor cursor = resolver.query(URI, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null);
-        if(!cursor.moveToFirst()) {
-            return new MissingRecipient();
+        if (!cursor.moveToFirst()) {
+            return new NullRecipient();
         }
         return new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
     }
 
     public Recipient findByName(String name) {
         Cursor cursor = resolver.query(URI, COLUMNS, NAME + "=?", new String[]{name}, null);
-        if(!cursor.moveToFirst()) {
-            return new MissingRecipient();
+        if (!cursor.moveToFirst()) {
+            return new NullRecipient();
         }
         return new Recipient(cursor.getLong(0), cursor.getString(1), cursor.getLong(2));
     }

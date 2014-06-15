@@ -1,7 +1,7 @@
 package com.sgrailways.giftidea.core.domain;
 
-public class MissingIdea extends Idea {
-    public MissingIdea() {
+public class NullIdea extends Idea {
+    public NullIdea() {
         super(Long.MIN_VALUE, "", false, Long.MIN_VALUE);
     }
 }
