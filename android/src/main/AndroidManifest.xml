@@ -16,8 +16,10 @@
         </activity>
         <activity android:name=".IdeaActivity"
                   android:screenOrientation="portrait"
-                  android:parentActivityName=".RecipientIdeasActivity">
-          <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".RecipientIdeasActivity"/>
+                  android:parentActivityName=".MainActivity">
+          <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value=".MainActivity"/>
         </activity>
         <activity android:name=".RecipientIdeasActivity"
                   android:screenOrientation="portrait"
