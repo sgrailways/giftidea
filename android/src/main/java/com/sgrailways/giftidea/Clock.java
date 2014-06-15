@@ -21,6 +21,6 @@ public class Clock {
     }
 
     public int daysUntil(LocalDate celebratedAt) {
-        return Days.daysBetween(DateTime.now(), celebratedAt.toDateTime(LocalTime.fromMillisOfDay(0))).getDays();
+        return Days.daysBetween(DateTime.now().withTimeAtStartOfDay(), celebratedAt.toDateTime(LocalTime.fromMillisOfDay(0))).getDays();
     }
 }
