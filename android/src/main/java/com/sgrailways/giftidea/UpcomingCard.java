@@ -3,6 +3,7 @@ package com.sgrailways.giftidea;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,6 +21,8 @@ public class UpcomingCard extends Card {
     @InjectView(R.id.days_remaining) TextView daysRemaining;
     @InjectView(R.id.plural_countdown_label) TextView pluralCountdownLabel;
     @InjectView(R.id.singular_countdown_label) TextView singularCountdownLabel;
+    @InjectView(R.id.today_label) TextView todayLabel;
+    @InjectView(R.id.future_label) LinearLayout futureLabel;
 
     public UpcomingCard(Context context, Holidays holidays, Clock clock, Bus bus) {
         super(context, R.layout.card_upcoming_events);
@@ -33,10 +36,16 @@ public class UpcomingCard extends Card {
         final Holiday holiday = holidays.findNext();
         int daysUntil = clock.daysUntil(holiday.getCelebratedAtLocalDate());
         eventName.setText(holiday.getName());
-        daysRemaining.setText(String.valueOf(daysUntil));
-        pluralCountdownLabel.setVisibility(daysUntil == 1 ? View.GONE : View.VISIBLE);
-        singularCountdownLabel.setVisibility(daysUntil == 1 ? View.VISIBLE : View.GONE);
-
+        if (daysUntil == 0) {
+            todayLabel.setVisibility(View.VISIBLE);
+            futureLabel.setVisibility(View.GONE);
+        } else {
+            todayLabel.setVisibility(View.GONE);
+            futureLabel.setVisibility(View.VISIBLE);
+            daysRemaining.setText(String.valueOf(daysUntil));
+            pluralCountdownLabel.setVisibility(daysUntil == 1 ? View.GONE : View.VISIBLE);
+            singularCountdownLabel.setVisibility(daysUntil == 1 ? View.VISIBLE : View.GONE);
+        }
         setOnClickListener(new OnCardClickListener() {
             @Override public void onClick(Card card, View view) {
                 bus.post(new FlipCardEvent(holiday.getId()));

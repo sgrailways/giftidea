@@ -22,7 +22,7 @@ public class Holidays {
         SQLiteDatabase db = helper.getWritableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Database.HolidaysTable.TABLE_NAME);
-        builder.appendWhere(Database.HolidaysTable.CELEBRATED_AT + ">" + LocalDate.now().toString(ISODateTimeFormat.basicDate()) + " AND " + Database.HolidaysTable.IS_CELEBRATED + "='" + String.valueOf(true) + "'");
+        builder.appendWhere(Database.HolidaysTable.CELEBRATED_AT + ">=" + LocalDate.now().toString(ISODateTimeFormat.basicDate()) + " AND " + Database.HolidaysTable.IS_CELEBRATED + "='" + String.valueOf(true) + "'");
         Cursor cursor= builder.query(db, new String[]{Database.HolidaysTable._ID, Database.HolidaysTable.NAME, Database.HolidaysTable.CELEBRATED_AT}, null, null, null, null, null, "1");
         if(!cursor.moveToFirst()) {
             return null;
