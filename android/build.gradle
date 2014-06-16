@@ -17,6 +17,8 @@ android {
   defaultConfig {
     minSdkVersion 14
     targetSdkVersion 19
+    versionCode versionCodeProp.toInteger()
+    versionName versionNameProp
   }
 
   compileOptions {
