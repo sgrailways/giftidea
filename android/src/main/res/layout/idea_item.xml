@@ -2,18 +2,22 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="48dp">
+
+  <RelativeLayout
+      android:padding="8dp"
+      android:background="@drawable/card_background"
+      android:layout_marginBottom="4dp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
   <TextView
       android:id="@+id/idea"
       android:layout_height="match_parent"
       android:layout_width="match_parent"
-      android:padding="8dp"
       android:lines="1"
       android:ellipsize="end"
       android:gravity="center_vertical"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentBottom="true"
       android:layout_alignParentLeft="true"
       android:layout_toLeftOf="@+id/got_it"
       android:clickable="true"
@@ -23,11 +27,9 @@
       android:id="@+id/got_it"
       android:layout_height="match_parent"
       android:layout_width="wrap_content"
-      android:padding="8dp"
       android:gravity="center"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentBottom="true"
       android:layout_alignParentRight="true"
       android:text="@string/got_it"
       android:clickable="true"/>
+  </RelativeLayout>
 </RelativeLayout>
