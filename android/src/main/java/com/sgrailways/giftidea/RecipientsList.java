@@ -17,6 +17,7 @@ import com.sgrailways.giftidea.wiring.BaseActivity;
 
 import javax.inject.Inject;
 
+import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.IDEAS_COUNT;
 import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
 
@@ -80,7 +81,7 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     @Override public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case RECIPIENTS_LOADER:
-                return new CursorLoader(getActivity(), Recipients.URI, null, null, null, null);
+                return new CursorLoader(getActivity(), Recipients.URI, new String[]{_ID, NAME, IDEAS_COUNT}, null, null, null);
             default:
                 return null;
         }
