@@ -53,9 +53,11 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
                 name.setText(cursor.getString(1));
                 long ideasCount = cursor.getLong(2);
                 count.setText(String.valueOf(ideasCount));
+                TextView ideasLabel = (TextView) rootView.findViewById(R.id.ideas_count_label);
                 if(ideasCount == 1L) {
-                    TextView ideasLabel = (TextView) rootView.findViewById(R.id.ideas_count_label);
                     ideasLabel.setText(getString(R.string.idea_label));
+                } else {
+                    ideasLabel.setText(R.string.ideas_label);
                 }
                 rootView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
