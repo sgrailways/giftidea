@@ -43,5 +43,6 @@
   <string name="keep_countdown">Continue</string>
   <string name="stop_countdown_message">Countdown Stopped</string>
   <string name="today_label">today :)</string>
+  <string name="upcoming">Upcoming Event</string>
 
 </resources>

@@ -12,6 +12,7 @@ import com.sgrailways.giftidea.db.Holidays;
 import com.sgrailways.giftidea.events.FlipCardEvent;
 import com.squareup.otto.Bus;
 import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardHeader;
 
 public class UpcomingCard extends Card {
     private final Bus bus;
@@ -29,6 +30,10 @@ public class UpcomingCard extends Card {
         this.bus = bus;
         this.clock = clock;
         this.holidays = holidays;
+
+        CardHeader header = new CardHeader(getContext());
+        header.setTitle(context.getString(R.string.upcoming));
+        addCardHeader(header);
     }
 
     @Override public void setupInnerViewElements(ViewGroup parent, View view) {
