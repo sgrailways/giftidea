@@ -17,16 +17,19 @@ public class GiftIdeaApplication extends Application {
         if(BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        graph = ObjectGraph.create(new AndroidModule(this));
+        graph = getApplicationGraph();
         graph.inject(this);
         database.upgrade();
     }
 
     public void inject(Object o) {
-        graph.inject(o);
+        getApplicationGraph().inject(o);
     }
 
     public ObjectGraph getApplicationGraph() {
+        if (graph == null) {
+            graph = ObjectGraph.create(new AndroidModule(this));
+        }
         return graph;
     }
 }
