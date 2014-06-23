@@ -10,8 +10,7 @@ public class BaseActivity extends Activity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        graph = ((GiftIdeaApplication) getApplication()).getApplicationGraph().plus(new ActivityModule(this));
-        graph.inject(this);
+        getGraph().inject(this);
     }
 
     @Override protected void onDestroy() {
@@ -20,6 +19,15 @@ public class BaseActivity extends Activity {
     }
 
     public void inject(Object o) {
-        graph.inject(o);
+        getGraph().inject(o);
+    }
+
+    private ObjectGraph getGraph() {
+        if (graph == null) {
+            GiftIdeaApplication application = (GiftIdeaApplication) getApplication();
+            ObjectGraph applicationGraph = application.getApplicationGraph();
+            graph = applicationGraph.plus(new ActivityModule(this));
+        }
+        return graph;
     }
 }
