@@ -78,7 +78,8 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     @Override public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case IDEAS_LOADER:
-                return new CursorLoader(getActivity(), Ideas.URI, Ideas.COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{session.getActiveRecipientId()}, _ID + " ASC");
+                String sortOrder = String.format("%s ASC, %s ASC", Database.IdeasTable.IS_DONE, _ID);
+                return new CursorLoader(getActivity(), Ideas.URI, Ideas.COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{session.getActiveRecipientId()}, sortOrder);
             default:
                 return null;
         }
