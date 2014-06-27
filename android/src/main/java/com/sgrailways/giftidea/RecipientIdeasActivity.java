@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.GotItEvent;
-import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.wiring.BaseActivity;
 import com.sgrailways.statham.ActionFactory;
 import com.squareup.otto.Bus;
@@ -51,10 +50,6 @@ public class RecipientIdeasActivity extends BaseActivity {
     @Override protected void onResume() {
         getFragmentManager().beginTransaction().replace(R.id.recipients, new RecipientIdeasList()).commit();
         super.onResume();
-    }
-
-    @Subscribe public void answerRefreshIdeasList(RefreshIdeasListEvent event) {
-        onResume();
     }
 
     @Subscribe public void answerDeleteIdea(DeleteIdeaEvent event) {

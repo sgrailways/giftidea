@@ -9,7 +9,6 @@ import android.view.View;
 import com.sgrailways.giftidea.core.domain.Recipient;
 import com.sgrailways.giftidea.events.DeleteIdeaEvent;
 import com.sgrailways.giftidea.events.GotItEvent;
-import com.sgrailways.giftidea.events.RefreshIdeasListEvent;
 import com.sgrailways.giftidea.listeners.DialogDismissListener;
 import com.sgrailways.giftidea.wiring.ForActivity;
 import com.squareup.otto.Bus;
@@ -37,7 +36,6 @@ public class ListenerFactory {
             public void onClick(DialogInterface dialog, int which) {
                 bus.post(new DeleteIdeaEvent(id));
                 toaster.show(message);
-                bus.post(new RefreshIdeasListEvent());
             }
         };
     }
@@ -47,7 +45,6 @@ public class ListenerFactory {
             public void onClick(View v) {
                 bus.post(new GotItEvent(id, recipient.getName()));
                 toaster.show(message);
-                bus.post(new RefreshIdeasListEvent());
             }
         };
     }
