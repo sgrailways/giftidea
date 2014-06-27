@@ -2,15 +2,16 @@ package com.sgrailways.giftidea;
 
 import android.app.ListFragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.sgrailways.giftidea.db.Recipients;
 import com.sgrailways.giftidea.wiring.BaseActivity;
@@ -23,7 +24,7 @@ import static com.sgrailways.giftidea.db.Database.RecipientsTable.NAME;
 
 public class RecipientsList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int RECIPIENTS_LOADER = 111;
-    private SimpleCursorAdapter adapter;
+    private CursorAdapter adapter;
     @Inject Session session;
     @Inject Recipients recipients;
 
@@ -34,42 +35,7 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        adapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.recipient_item,
-                null,
-                new String[]{NAME, IDEAS_COUNT},
-                new int[]{R.id.name, R.id.ideas_count},
-                0
-        );
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                View rootView = view.getRootView();
-                TextView name = (TextView) rootView.findViewById(R.id.name);
-                TextView count = (TextView) rootView.findViewById(R.id.ideas_count);
-                if (name == null || count == null) {
-                    return false;
-                }
-                name.setText(cursor.getString(1));
-                long ideasCount = cursor.getLong(2);
-                count.setText(String.valueOf(ideasCount));
-                TextView ideasLabel = (TextView) rootView.findViewById(R.id.ideas_count_label);
-                if(ideasCount == 1L) {
-                    ideasLabel.setText(getString(R.string.idea_label));
-                } else {
-                    ideasLabel.setText(R.string.ideas_label);
-                }
-                rootView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent intent = new Intent(RecipientsList.this.getActivity(), RecipientIdeasActivity.class);
-                        String name = ((TextView) v.findViewById(R.id.name)).getText().toString();
-                        session.setActiveRecipient(recipients.findByName(name));
-                        startActivity(intent);
-                    }
-                });
-                return true;
-            }
-        });
+        adapter = new RecipientsCursorAdapter(getActivity());
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -94,4 +60,45 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     }
 
     @Override public void onLoaderReset(Loader<Cursor> cursorLoader) {}
+
+    class RecipientsCursorAdapter extends CursorAdapter {
+        private final LayoutInflater inflater;
+
+        public RecipientsCursorAdapter(Context context) {
+            super(context, null, 0);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+            View view = inflater.inflate(R.layout.recipient_item, viewGroup, false);
+            ViewHolder holder = new ViewHolder();
+            holder.name = (TextView) view.findViewById(R.id.name);
+            holder.ideasCount = (TextView) view.findViewById(R.id.ideas_count);
+            holder.ideasLabel = (TextView) view.findViewById(R.id.ideas_count_label);
+            view.setTag(holder);
+            return view;
+        }
+
+        @Override public void bindView(View view, Context context, Cursor cursor) {
+            final ViewHolder holder = (ViewHolder) view.getTag();
+            holder.name.setText(cursor.getString(1));
+            long ideasCount = cursor.getLong(2);
+            holder.ideasCount.setText(String.valueOf(ideasCount));
+            holder.ideasLabel.setText(ideasCount == 1L ? R.string.idea_label : R.string.ideas_label);
+            view.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(RecipientsList.this.getActivity(), RecipientIdeasActivity.class);
+                    String name = holder.name.getText().toString();
+                    session.setActiveRecipient(recipients.findByName(name));
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    static class ViewHolder {
+        TextView name;
+        TextView ideasCount;
+        TextView ideasLabel;
+    }
 }
