@@ -2,6 +2,7 @@ package com.sgrailways.giftidea;
 
 import android.app.ListFragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -10,7 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.sgrailways.giftidea.core.domain.Recipient;
 import com.sgrailways.giftidea.db.Database;
@@ -20,11 +21,10 @@ import com.sgrailways.giftidea.wiring.BaseActivity;
 import javax.inject.Inject;
 
 import static android.provider.BaseColumns._ID;
-import static com.sgrailways.giftidea.db.Database.IdeasTable.IDEA;
 
 public class RecipientIdeasList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int IDEAS_LOADER = 112;
-    private SimpleCursorAdapter adapter;
+    private CursorAdapter adapter;
     @Inject ListenerFactory listenerFactory;
     @Inject Session session;
 
@@ -35,37 +35,7 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        adapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.idea_item,
-                null,
-                new String[]{IDEA},
-                new int[]{R.id.idea},
-                0
-        );
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                TextView idea = (TextView) view.getRootView().findViewById(R.id.idea);
-                TextView gotIt = (TextView) view.getRootView().findViewById(R.id.got_it);
-                if (gotIt == null || idea == null) {
-                    return false;
-                }
-                final long id = cursor.getLong(0);
-                view.setId((int)id);
-                String ideaString = cursor.getString(1);
-                idea.setText(ideaString);
-                Recipient recipient = session.getActiveRecipient();
-                if (Boolean.parseBoolean(cursor.getString(2))) {
-                    gotIt.setVisibility(View.GONE);
-                    idea.setPaintFlags(idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipient, getString(R.string.finished_idea_deleted_message), getActivity()));
-                } else {
-                    gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipient, getString(R.string.got_it_message)));
-                    idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipient));
-                }
-                return true;
-            }
-        });
+        adapter = new IdeasCursorAdapter(getActivity());
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -90,4 +60,45 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     }
 
     @Override public void onLoaderReset(Loader<Cursor> cursorLoader) {}
+
+    class IdeasCursorAdapter extends CursorAdapter {
+        private final LayoutInflater inflater;
+
+        public IdeasCursorAdapter(Context context) {
+            super(context, null, 0);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+            ViewHolder holder = new ViewHolder();
+            View view = inflater.inflate(R.layout.idea_item, viewGroup, false);
+            holder.idea = (TextView) view.findViewById(R.id.idea);
+            holder.gotIt = (TextView) view.findViewById(R.id.got_it);
+            view.setTag(holder);
+            return view;
+        }
+
+        @Override public void bindView(View view, Context context, Cursor cursor) {
+            ViewHolder holder = (ViewHolder) view.getTag();
+            holder.idea.setText(cursor.getString(1));
+            Recipient recipient = session.getActiveRecipient();
+            final long id = cursor.getLong(0);
+            view.setId((int) id);
+            boolean done = Boolean.parseBoolean(cursor.getString(2));
+            holder.gotIt.setVisibility(done ? View.GONE : View.VISIBLE);
+            if (done) {
+                holder.idea.setPaintFlags(holder.idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.idea.setOnClickListener(listenerFactory.confirmDeleteListener(id, recipient, getString(R.string.finished_idea_deleted_message), getActivity()));
+            } else {
+                holder.gotIt.setOnClickListener(listenerFactory.gotItListener(id, recipient, getString(R.string.got_it_message)));
+                holder.idea.setOnClickListener(listenerFactory.editIdeaListener(id, recipient));
+                holder.idea.setPaintFlags(holder.idea.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+        }
+    }
+
+    static class ViewHolder {
+        TextView idea;
+        TextView gotIt;
+    }
 }
