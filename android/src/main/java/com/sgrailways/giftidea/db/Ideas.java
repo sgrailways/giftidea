@@ -21,6 +21,8 @@ import static com.sgrailways.giftidea.db.Database.IdeasTable.RECIPIENT_ID;
 public class Ideas {
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/com.sgrailways.giftidea_ideas";
     public static final String CONTENT_IDEA_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/com.sgrailways.giftidea_ideas";
+    public static final String DEFAULT_SORT = String.format("%s ASC, %s ASC", Database.IdeasTable.IS_DONE, _ID);
+    public static final String QUERY_BY_RECIPIENT_ID = RECIPIENT_ID + "=?";
     private final Recipients recipients;
     private final Clock clock;
     private final ContentResolver resolver;

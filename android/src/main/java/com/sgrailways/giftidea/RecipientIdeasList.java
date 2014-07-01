@@ -14,13 +14,10 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.sgrailways.giftidea.core.domain.Recipient;
-import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.wiring.BaseActivity;
 
 import javax.inject.Inject;
-
-import static android.provider.BaseColumns._ID;
 
 public class RecipientIdeasList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int IDEAS_LOADER = 112;
@@ -48,8 +45,7 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     @Override public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case IDEAS_LOADER:
-                String sortOrder = String.format("%s ASC, %s ASC", Database.IdeasTable.IS_DONE, _ID);
-                return new CursorLoader(getActivity(), Ideas.URI, Ideas.COLUMNS, Database.IdeasTable.RECIPIENT_ID + "=?", new String[]{session.getActiveRecipientId()}, sortOrder);
+                return new CursorLoader(getActivity(), Ideas.URI, Ideas.COLUMNS, Ideas.QUERY_BY_RECIPIENT_ID, new String[]{session.getActiveRecipientId()}, Ideas.DEFAULT_SORT);
             default:
                 return null;
         }
