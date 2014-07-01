@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'pmd'
+
+sourceCompatibility = '1.7'
 
 repositories {
   mavenCentral()
@@ -10,3 +13,6 @@ dependencies {
   testCompile 'junit:junit:4.11'
 }
 
+pmd {
+  ruleSets = ['basic', 'braces']
+}
