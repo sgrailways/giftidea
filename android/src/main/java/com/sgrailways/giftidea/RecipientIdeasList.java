@@ -21,6 +21,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.sgrailways.giftidea.core.domain.Recipient;
+import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.wiring.BaseActivity;
 import com.squareup.picasso.Picasso;
@@ -105,12 +106,12 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
 
     @Override public void onLoaderReset(Loader<Cursor> cursorLoader) {}
 
-    class IdeasCursorAdapter extends CursorAdapter {
+    public class IdeasCursorAdapter extends CursorAdapter {
         private final LayoutInflater inflater;
 
         public IdeasCursorAdapter(Context context) {
             super(context, null, 0);
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = LayoutInflater.from(context);
         }
 
         @Override public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
@@ -125,9 +126,9 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
 
         @Override public void bindView(View view, Context context, Cursor cursor) {
             ViewHolder holder = (ViewHolder) view.getTag();
-            holder.idea.setText(cursor.getString(1));
+            holder.idea.setText(cursor.getString(Ideas.COLUMN_INDEXES.get(Database.IdeasTable.IDEA)));
             Recipient recipient = session.getActiveRecipient();
-            final long id = cursor.getLong(0);
+            final long id = cursor.getLong(Ideas.COLUMN_INDEXES.get(Database.IdeasTable._ID));
             view.setId((int) id);
             final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             boolean cameraIsAvailable = takePictureIntent.resolveActivity(context.getPackageManager()) != null;
@@ -152,15 +153,15 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
                         }
                     }
                 });
-                String ideaImageUri = cursor.getString(4);
+                String ideaImageUri = cursor.getString(Ideas.COLUMN_INDEXES.get(Database.IdeasTable.IMAGE_URI));
                 Timber.d("Found image uri '%s'", ideaImageUri);
                 if (TextUtils.isEmpty(ideaImageUri)) {
-                    Picasso.with(getActivity()).load(android.R.drawable.ic_menu_camera).into(holder.image);
+                    Picasso.with(context).load(android.R.drawable.ic_menu_camera).into(holder.image);
                 } else {
-                    Picasso.with(getActivity()).load(ideaImageUri).resize(64, 64).centerCrop().into(holder.image);
+                    Picasso.with(context).load(ideaImageUri).resize(64, 64).centerCrop().into(holder.image);
                 }
             }
-            boolean done = Boolean.parseBoolean(cursor.getString(2));
+            boolean done = Boolean.parseBoolean(cursor.getString(Ideas.COLUMN_INDEXES.get(Database.IdeasTable.IS_DONE)));
             holder.gotIt.setVisibility(done ? View.GONE : View.VISIBLE);
             if (done) {
                 holder.idea.setPaintFlags(holder.idea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

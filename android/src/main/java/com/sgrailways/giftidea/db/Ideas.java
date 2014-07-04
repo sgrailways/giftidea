@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import com.google.common.base.CharMatcher;
+import com.google.common.collect.ImmutableMap;
 import com.sgrailways.giftidea.Clock;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.core.domain.Idea;
@@ -16,6 +17,7 @@ import timber.log.Timber;
 import javax.inject.Inject;
 import java.io.File;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 import static android.provider.BaseColumns._ID;
 import static com.sgrailways.giftidea.db.Database.IdeasTable.RECIPIENT_ID;
@@ -37,6 +39,13 @@ public class Ideas {
             Database.IdeasTable.RECIPIENT_ID,
             Database.IdeasTable.IMAGE_URI
     };
+    public final static Map<String, Integer> COLUMN_INDEXES = ImmutableMap.of(
+            Database.IdeasTable._ID, 0,
+            Database.IdeasTable.IDEA, 1,
+            Database.IdeasTable.IS_DONE, 2,
+            Database.IdeasTable.RECIPIENT_ID, 3,
+            Database.IdeasTable.IMAGE_URI, 4
+    );
     public static final Uri URI = Uri.parse("content://com.sgrailways.giftidea/ideas");
 
     @Inject
