@@ -67,5 +67,6 @@ dependencies {
   compile 'com.jakewharton:butterknife:4.0.+'
   compile 'com.squareup.dagger:dagger:1.2.+'
   compile 'com.squareup.dagger:dagger-compiler:1.2.+'
+    compile 'com.squareup.picasso:picasso:2.3.2'
 }
 

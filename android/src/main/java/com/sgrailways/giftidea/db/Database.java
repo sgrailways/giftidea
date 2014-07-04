@@ -23,7 +23,7 @@ import static org.joda.time.DateTimeZone.UTC;
 @Singleton
 public class Database extends SQLiteOpenHelper {
     private final static String NAME = "giftidea.db";
-    private final static int VERSION = 3;
+    private final static int VERSION = 4;
 
     @Inject
     public Database(@ForApplication Context context) {
@@ -37,16 +37,9 @@ public class Database extends SQLiteOpenHelper {
                 .append(RecipientsTable.IDEAS_COUNT).append(" integer,")
                 .append(RecipientsTable.CREATED_AT).append(" text,")
                 .append(RecipientsTable.UPDATED_AT).append(" text)").toString();
-        String createIdeas = new StringBuilder("create table ").append(IdeasTable.TABLE_NAME).append("(")
-                .append(IdeasTable._ID).append(" integer primary key autoincrement,")
-                .append(IdeasTable.RECIPIENT_ID).append(" integer,")
-                .append(IdeasTable.IDEA).append(" text,")
-                .append(IdeasTable.IS_DONE).append(" text,")
-                .append(IdeasTable.CREATED_AT).append(" text,")
-                .append(IdeasTable.UPDATED_AT).append(" text)").toString();
 
         db.execSQL(createRecipients);
-        db.execSQL(createIdeas);
+        db.execSQL(IdeasTable.CREATE_TABLE);
         db.execSQL(HolidaysTable.CREATE_STATEMENT);
         bootstrapHolidays(db);
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS IDX_RECIPIENTS_NAME ON " + RecipientsTable.TABLE_NAME + "(" + RecipientsTable.NAME + ")");
@@ -76,6 +69,9 @@ public class Database extends SQLiteOpenHelper {
         if(oldVersion == 1 || oldVersion == 2) {
             db.execSQL(HolidaysTable.CREATE_STATEMENT);
             bootstrapHolidays(db);
+        }
+        if (oldVersion <= 3) {
+            db.execSQL("ALTER TABLE " + IdeasTable.TABLE_NAME + " ADD COLUMN " + IdeasTable.IMAGE_URI + " TEXT");
         }
     }
 
@@ -146,6 +142,8 @@ public class Database extends SQLiteOpenHelper {
         public final static String IS_DONE = "is_done";
         public final static String CREATED_AT = "created_at";
         public final static String UPDATED_AT = "updated_at";
+        public final static String IMAGE_URI = "image_uri";
+        public static final String CREATE_TABLE = "create table " + IdeasTable.TABLE_NAME + "(" + IdeasTable._ID + " integer primary key autoincrement," + IdeasTable.RECIPIENT_ID + " integer," + IdeasTable.IDEA + " text," + IdeasTable.IS_DONE + " text," + IdeasTable.IMAGE_URI + " text," + IdeasTable.CREATED_AT + " text," + IdeasTable.UPDATED_AT + " text)";
     }
 
     public static class HolidaysTable implements BaseColumns {

@@ -11,8 +11,10 @@ import com.sgrailways.giftidea.core.domain.Idea;
 import com.sgrailways.giftidea.core.domain.NullIdea;
 import com.sgrailways.giftidea.core.domain.NullRecipient;
 import com.sgrailways.giftidea.core.domain.Recipient;
+import timber.log.Timber;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.LinkedHashSet;
 
 import static android.provider.BaseColumns._ID;
@@ -23,6 +25,7 @@ public class Ideas {
     public static final String CONTENT_IDEA_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/com.sgrailways.giftidea_ideas";
     public static final String DEFAULT_SORT = String.format("%s ASC, %s ASC", Database.IdeasTable.IS_DONE, _ID);
     public static final String QUERY_BY_RECIPIENT_ID = RECIPIENT_ID + "=?";
+    public static final String QUERY_BY_ID = _ID + "=?";
     private final Recipients recipients;
     private final Clock clock;
     private final ContentResolver resolver;
@@ -31,7 +34,8 @@ public class Ideas {
             Database.IdeasTable._ID,
             Database.IdeasTable.IDEA,
             Database.IdeasTable.IS_DONE,
-            Database.IdeasTable.RECIPIENT_ID
+            Database.IdeasTable.RECIPIENT_ID,
+            Database.IdeasTable.IMAGE_URI
     };
     public static final Uri URI = Uri.parse("content://com.sgrailways.giftidea/ideas");
 
@@ -44,11 +48,11 @@ public class Ideas {
     }
 
     public Idea findById(long id) {
-        Cursor cursor = resolver.query(URI, COLUMNS, _ID + "=?", new String[]{String.valueOf(id)}, null);
+        Cursor cursor = resolver.query(URI, COLUMNS, QUERY_BY_ID, new String[]{String.valueOf(id)}, null);
         if (!cursor.moveToFirst()) {
             return new NullIdea();
         }
-        return new Idea(cursor.getLong(0), cursor.getString(1), Boolean.parseBoolean(cursor.getString(2)), cursor.getLong(3));
+        return new Idea(cursor.getLong(0), cursor.getString(1), Boolean.parseBoolean(cursor.getString(2)), cursor.getLong(3), cursor.getString(4));
     }
 
     public void delete(long id) {
@@ -56,10 +60,10 @@ public class Ideas {
         if (!idea.isDone()) {
             recipients.decrementIdeaCountFor(idea.getRecipientId());
         }
-        resolver.delete(URI, _ID + "=?", new String[]{String.valueOf(id)});
+        resolver.delete(URI, QUERY_BY_ID, new String[]{String.valueOf(id)});
         Cursor cursor = resolver.query(URI, new String[]{_ID}, RECIPIENT_ID + "=?", new String[]{String.valueOf(idea.getRecipientId())}, null);
         if (cursor.getCount() == 0) {
-            resolver.delete(Recipients.URI, _ID + "=?", new String[]{String.valueOf(idea.getRecipientId())});
+            resolver.delete(Recipients.URI, QUERY_BY_ID, new String[]{String.valueOf(idea.getRecipientId())});
         }
     }
 
@@ -67,7 +71,23 @@ public class Ideas {
         ContentValues ideaValues = new ContentValues();
         ideaValues.put(Database.IdeasTable.IDEA, CharMatcher.WHITESPACE.collapseFrom(idea, ' '));
         ideaValues.put(Database.IdeasTable.UPDATED_AT, clock.now());
-        resolver.update(URI, ideaValues, _ID + "=?", new String[]{String.valueOf(id)});
+        resolver.update(URI, ideaValues, QUERY_BY_ID, new String[]{String.valueOf(id)});
+    }
+
+    public void updateImageUrl(long id, String url) {
+        File photo = findById(id).getPhoto();
+        if (photo != null && photo.exists()) {
+            if (photo.delete()) {
+                Timber.d("Existing photo deleted for image %d", id);
+            } else {
+                Timber.d("Existing photo for idea %d failed to delete", id);
+            }
+        }
+        ContentValues ideaValues = new ContentValues();
+        ideaValues.put(Database.IdeasTable.UPDATED_AT, clock.now());
+        ideaValues.put(Database.IdeasTable.IMAGE_URI, url);
+        resolver.update(URI, ideaValues, QUERY_BY_ID, new String[]{String.valueOf(id)});
+        Timber.d("Updated idea #%d with image '%s'", id, url);
     }
 
     public void createFromText(String idea) {
@@ -96,7 +116,7 @@ public class Ideas {
         ContentValues values = new ContentValues();
         values.put(Database.IdeasTable.IS_DONE, String.valueOf(true));
         values.put(Database.IdeasTable.UPDATED_AT, clock.now());
-        resolver.update(URI, values, _ID + "=?", new String[]{String.valueOf(id)});
+        resolver.update(URI, values, QUERY_BY_ID, new String[]{String.valueOf(id)});
 
         Recipient recipient = recipients.findByName(recipientName);
         if (!(recipient instanceof NullRecipient)) {
