@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="64dp">
 
@@ -15,7 +16,6 @@
 
   <RelativeLayout
       android:padding="8dp"
-      android:background="@drawable/card_background"
       android:layout_toRightOf="@+id/idea_image"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
