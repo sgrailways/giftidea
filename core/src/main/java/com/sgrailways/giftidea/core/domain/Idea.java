@@ -67,4 +67,8 @@ public class Idea {
     public boolean hasPhoto() {
         return getPhoto() != null;
     }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
 }

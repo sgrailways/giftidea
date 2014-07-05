@@ -15,7 +15,11 @@ public final class IdeaImageUtility {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(PreferenceKeys.PENDING_IDEA_IMAGE_URI);
         editor.apply();
-        if ("".equals(imageUri)) {
+        return destroyImage(imageUri);
+    }
+
+    public static boolean destroyImage(String imageUri) {
+        if (imageUri == null || "".equals(imageUri)) {
             Timber.d("No image uri found");
             return true;
         }

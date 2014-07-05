@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableMap;
 import com.sgrailways.giftidea.Clock;
+import com.sgrailways.giftidea.IdeaImageUtility;
 import com.sgrailways.giftidea.core.HashTagLocator;
 import com.sgrailways.giftidea.core.domain.Idea;
 import com.sgrailways.giftidea.core.domain.NullIdea;
@@ -69,6 +70,7 @@ public class Ideas {
         if (!idea.isDone()) {
             recipients.decrementIdeaCountFor(idea.getRecipientId());
         }
+        IdeaImageUtility.destroyImage(idea.getPhotoUri());
         resolver.delete(URI, QUERY_BY_ID, new String[]{String.valueOf(id)});
         Cursor cursor = resolver.query(URI, new String[]{_ID}, RECIPIENT_ID + "=?", new String[]{String.valueOf(idea.getRecipientId())}, null);
         if (cursor.getCount() == 0) {
