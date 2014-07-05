@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.sgrailways.giftidea.core.domain.Recipient;
 import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.db.Ideas;
@@ -98,7 +100,8 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
         adapter.changeCursor(cursor);
     }
 
-    @Override public void onLoaderReset(Loader<Cursor> cursorLoader) {}
+    @Override public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
 
     public class IdeasCursorAdapter extends CursorAdapter {
         private final LayoutInflater inflater;
@@ -109,12 +112,8 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
         }
 
         @Override public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-            ViewHolder holder = new ViewHolder();
             View view = inflater.inflate(R.layout.idea_item, viewGroup, false);
-            holder.image = (ImageView) view.findViewById(R.id.idea_image);
-            holder.idea = (TextView) view.findViewById(R.id.idea);
-            holder.gotIt = (TextView) view.findViewById(R.id.got_it);
-            view.setTag(holder);
+            view.setTag(new ViewHolder(view));
             return view;
         }
 
@@ -173,8 +172,12 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     }
 
     static class ViewHolder {
-        ImageView image;
-        TextView idea;
-        TextView gotIt;
+        @InjectView(R.id.idea_image) ImageView image;
+        @InjectView(R.id.idea) TextView idea;
+        @InjectView(R.id.got_it) TextView gotIt;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }

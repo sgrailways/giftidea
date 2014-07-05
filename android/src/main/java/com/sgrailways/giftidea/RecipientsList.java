@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.sgrailways.giftidea.db.Recipients;
 import com.sgrailways.giftidea.wiring.BaseActivity;
 
@@ -71,11 +73,7 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
 
         @Override public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
             View view = inflater.inflate(R.layout.recipient_item, viewGroup, false);
-            ViewHolder holder = new ViewHolder();
-            holder.name = (TextView) view.findViewById(R.id.name);
-            holder.ideasCount = (TextView) view.findViewById(R.id.ideas_count);
-            holder.ideasLabel = (TextView) view.findViewById(R.id.ideas_count_label);
-            view.setTag(holder);
+            view.setTag(new ViewHolder(view));
             return view;
         }
 
@@ -97,8 +95,12 @@ public class RecipientsList extends ListFragment implements LoaderManager.Loader
     }
 
     static class ViewHolder {
-        TextView name;
-        TextView ideasCount;
-        TextView ideasLabel;
+        @InjectView(R.id.name) TextView name;
+        @InjectView(R.id.ideas_count) TextView ideasCount;
+        @InjectView(R.id.ideas_count_label) TextView ideasLabel;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }
