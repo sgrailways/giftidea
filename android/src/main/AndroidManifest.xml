@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="36" android:versionName="1.2.0" package="com.sgrailways.giftidea">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.sgrailways.giftidea">
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
       android:allowBackup="true"
