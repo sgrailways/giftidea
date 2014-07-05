@@ -63,4 +63,8 @@ public class Idea {
     @Override public int hashCode() {
         return Objects.hash(done, id, recipientId, text, photoUri);
     }
+
+    public boolean hasPhoto() {
+        return getPhoto() != null;
+    }
 }

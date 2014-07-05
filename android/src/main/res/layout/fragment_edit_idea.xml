@@ -23,4 +23,9 @@
     android:hint="@string/edit_idea_hint"
     android:imeOptions="actionDone"/>
 
+  <ImageView
+      android:id="@+id/idea_image"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
 </LinearLayout>

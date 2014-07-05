@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -17,6 +18,7 @@ import com.sgrailways.giftidea.db.Ideas;
 import com.sgrailways.giftidea.core.domain.Idea;
 import com.sgrailways.giftidea.wiring.BaseFragment;
 import com.sgrailways.statham.ActionFactory;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,7 @@ public class EditIdeaFragment extends BaseFragment {
     @Inject ActionFactory actionFactory;
     @InjectView(R.id.idea) EditText ideaEditText;
     @InjectView(R.id.recipient) TextView recipient;
+    @InjectView(R.id.idea_image) ImageView ideaImage;
     Long ideaId;
     boolean isValid = false;
 
@@ -54,6 +57,9 @@ public class EditIdeaFragment extends BaseFragment {
             }
         });
         recipient.setText(session.getActiveRecipientName());
+        if (idea.hasPhoto()) {
+            Picasso.with(getActivity()).load(idea.getPhoto()).into(ideaImage);
+        }
     }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
