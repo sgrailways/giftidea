@@ -2,6 +2,7 @@ package com.sgrailways.giftidea.wiring;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import com.sgrailways.giftidea.AboutActivity;
 import com.sgrailways.giftidea.EditIdeaFragment;
 import com.sgrailways.giftidea.GiftIdeaApplication;
@@ -54,4 +55,8 @@ public class AndroidModule {
     @Provides @Singleton ActionFactory providesActionFactory() { return new Statham(); }
 
     @Provides ContentResolver providesContentResolver() { return application.getContentResolver(); }
+
+    @Provides @Singleton SharedPreferences providesSharedPreferences() {
+        return application.getSharedPreferences("giftidea.pref", Context.MODE_PRIVATE);
+    }
 }

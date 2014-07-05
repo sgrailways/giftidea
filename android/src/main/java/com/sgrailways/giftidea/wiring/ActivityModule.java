@@ -2,7 +2,6 @@ package com.sgrailways.giftidea.wiring;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import com.sgrailways.giftidea.ListenerFactory;
 import com.sgrailways.giftidea.RecipientIdeasList;
 import dagger.Module;
@@ -27,9 +26,5 @@ public class ActivityModule {
 
     @Provides @Singleton @ForActivity Context providesActivityContext() {
         return activity;
-    }
-
-    @Provides @Singleton SharedPreferences providesSharedPreferences() {
-        return activity.getSharedPreferences("giftidea.pref", Context.MODE_PRIVATE);
     }
 }
