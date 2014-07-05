@@ -1,6 +1,7 @@
 package com.sgrailways.giftidea;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import com.sgrailways.giftidea.db.Database;
 import com.sgrailways.giftidea.wiring.AndroidModule;
 import dagger.ObjectGraph;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 public class GiftIdeaApplication extends Application {
     private ObjectGraph graph;
     @Inject Database database;
+    @Inject SharedPreferences preferences;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -20,6 +22,7 @@ public class GiftIdeaApplication extends Application {
         graph = getApplicationGraph();
         graph.inject(this);
         database.upgrade();
+        IdeaImageUtility.destroyPendingIdeaImage(preferences); // if the app is exited abruptly, it could leave behind unwanted files
     }
 
     public void inject(Object o) {

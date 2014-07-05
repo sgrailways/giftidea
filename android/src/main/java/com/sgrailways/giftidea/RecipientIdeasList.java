@@ -33,8 +33,6 @@ import java.io.IOException;
 
 public class RecipientIdeasList extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int IDEAS_LOADER = 112;
-    public static final String PENDING_IDEA_IMAGE_URI = "PENDING_IDEA_IMAGE_URI";
-    public static final int IDEA_CAMERA_REQUEST_CODE = 88;
     private CursorAdapter adapter;
     @Inject ListenerFactory listenerFactory;
     @Inject Session session;
@@ -59,35 +57,31 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != IDEA_CAMERA_REQUEST_CODE) {
+        if (requestCode != RequestCodes.IDEA_CAMERA) {
             Timber.d("Request not for the camera activity. Passing on to super");
             super.onActivityResult(requestCode, resultCode, data);
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        String imageUrl = preferences.getString(PENDING_IDEA_IMAGE_URI, "");
-        if ("".equals(imageUrl)) {
-            return;
         }
         switch (resultCode) {
             case Activity.RESULT_OK:
                 Timber.d("Camera activity finished successfully");
-                Long ideaId = Long.valueOf(imageUrl.split("-")[1]);
-                ideas.updateImageUrl(ideaId, imageUrl);
+                SharedPreferences.Editor editor = preferences.edit();
+                String imageUri = preferences.getString(PreferenceKeys.PENDING_IDEA_IMAGE_URI, "");
+                if ("".equals(imageUri)) {
+                    return;
+                }
+                Long ideaId = Long.valueOf(imageUri.split("-")[1]);
+                ideas.updateImageUrl(ideaId, imageUri);
+                editor.remove(PreferenceKeys.PENDING_IDEA_IMAGE_URI);
+                editor.apply();
                 break;
             case Activity.RESULT_CANCELED:
                 Timber.d("Camera activity was cancelled");
-                if (new File(imageUrl).delete()) {
-                    Timber.d("File at '%s' created for idea image capture was deleted upon cancel", imageUrl);
-                } else {
-                    Timber.e("Failed to delete file at '%s' created for idea image", imageUrl);
-                }
+                IdeaImageUtility.destroyPendingIdeaImage(preferences);
                 break;
             default:
                 Timber.e("Unexpected result code from idea photo request");
                 break;
         }
-        editor.remove(PENDING_IDEA_IMAGE_URI);
-        editor.apply();
         Timber.d("Pending image url removed from session");
     }
 
@@ -146,10 +140,10 @@ public class RecipientIdeasList extends ListFragment implements LoaderManager.Lo
                         if (photoFile != null) {
                             SharedPreferences.Editor editor = preferences.edit();
                             Uri uri = Uri.fromFile(photoFile);
-                            editor.putString(PENDING_IDEA_IMAGE_URI, uri.toString());
+                            editor.putString(PreferenceKeys.PENDING_IDEA_IMAGE_URI, uri.toString());
                             editor.apply();
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                            startActivityForResult(takePictureIntent, IDEA_CAMERA_REQUEST_CODE);
+                            startActivityForResult(takePictureIntent, RequestCodes.IDEA_CAMERA);
                         }
                     }
                 });
