@@ -36,7 +36,7 @@ public class Idea {
     }
 
     public File getPhoto() {
-        return (photoUri == null || "".equals(photoUri)) ? null : new File(URI.create(photoUri).getPath());
+        return photoUri == null || "".equals(photoUri) ? null : new File(URI.create(photoUri).getPath());
     }
 
     @Override public String toString() {
