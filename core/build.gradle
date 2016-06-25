@@ -14,5 +14,5 @@ dependencies {
 }
 
 pmd {
-  ruleSets = ['basic', 'braces']
+  ruleSets = ['java-basic', 'java-braces']
 }
