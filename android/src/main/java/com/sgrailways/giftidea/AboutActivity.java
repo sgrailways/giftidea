@@ -25,7 +25,7 @@ public class AboutActivity extends PreferenceActivity {
         return actionFactory.create(item, this).invoke();
     }
 
-    class PreferenceFragment extends android.preference.PreferenceFragment {
+    public static class PreferenceFragment extends android.preference.PreferenceFragment {
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
